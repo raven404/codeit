@@ -1,2 +1,8586 @@
-# codeit
-This is the django website which scrapes the data from craigslist
+
+# Module 1
+
+   ### Welcome to the Answer notebook for Module 1 ! 
+These notebooks have been provided to code and solve all the queries asked in the modules.
+
+This environment has all the necessary libraries pre-installed, and all the Stock, Commodities and Index data files available at the following location - 
+
+
+
+#### The problem statements and their corresponding answers are expected to be in the following format - 
+
+
+
+#--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------#
+
+### Query 1.1 
+Import the csv file of the stock of your choosing using 'pd.read_csv()' function into a dataframe.
+Shares of a company can be offered in more than one category. The category of a stock is indicated in the ‘Series’ column. If the csv file has data on more than one category, the ‘Date’ column will have repeating values. To avoid repetitions in the date, remove all the rows where 'Series' column is NOT 'EQ'.
+Analyze and understand each column properly.
+You'd find the head(), tail() and describe() functions to be immensely useful for exploration. You're free to carry out any other exploration of your own.
+
+
+```python
+#The solution code should start right after the query statement, for example -
+import numpy as np 
+import pandas as pd
+import warnings
+warnings.filterwarnings('ignore')
+#And solve the query
+```
+
+
+```python
+infy_data=pd.read_csv("INFY.csv")
+infy_data.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Symbol</th>
+      <th>Series</th>
+      <th>Date</th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>15-May-2017</td>
+      <td>964.25</td>
+      <td>963.5</td>
+      <td>963.50</td>
+      <td>949.10</td>
+      <td>953.25</td>
+      <td>951.55</td>
+      <td>951.49</td>
+      <td>3648582</td>
+      <td>3.471580e+09</td>
+      <td>75335</td>
+      <td>3052819</td>
+      <td>83.67</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>16-May-2017</td>
+      <td>951.55</td>
+      <td>953.1</td>
+      <td>960.15</td>
+      <td>946.95</td>
+      <td>956.00</td>
+      <td>955.00</td>
+      <td>952.92</td>
+      <td>3065084</td>
+      <td>2.920775e+09</td>
+      <td>71808</td>
+      <td>1858063</td>
+      <td>60.62</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>17-May-2017</td>
+      <td>955.00</td>
+      <td>951.6</td>
+      <td>958.45</td>
+      <td>943.85</td>
+      <td>952.90</td>
+      <td>952.80</td>
+      <td>949.48</td>
+      <td>1457754</td>
+      <td>1.384110e+09</td>
+      <td>75429</td>
+      <td>792251</td>
+      <td>54.35</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>18-May-2017</td>
+      <td>952.80</td>
+      <td>943.0</td>
+      <td>973.90</td>
+      <td>942.85</td>
+      <td>960.25</td>
+      <td>961.75</td>
+      <td>962.61</td>
+      <td>4028924</td>
+      <td>3.878282e+09</td>
+      <td>120990</td>
+      <td>2309450</td>
+      <td>57.32</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>19-May-2017</td>
+      <td>961.75</td>
+      <td>961.5</td>
+      <td>962.70</td>
+      <td>947.85</td>
+      <td>957.40</td>
+      <td>957.95</td>
+      <td>954.18</td>
+      <td>2128698</td>
+      <td>2.031155e+09</td>
+      <td>88897</td>
+      <td>1457747</td>
+      <td>68.48</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+infy_data.tail()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Symbol</th>
+      <th>Series</th>
+      <th>Date</th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>491</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>07-May-2019</td>
+      <td>718.40</td>
+      <td>720.40</td>
+      <td>727.90</td>
+      <td>718.7</td>
+      <td>724.40</td>
+      <td>724.55</td>
+      <td>724.51</td>
+      <td>5747536</td>
+      <td>4.164127e+09</td>
+      <td>104342</td>
+      <td>3690425</td>
+      <td>64.21</td>
+    </tr>
+    <tr>
+      <th>492</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>08-May-2019</td>
+      <td>724.55</td>
+      <td>721.00</td>
+      <td>726.00</td>
+      <td>716.5</td>
+      <td>718.95</td>
+      <td>719.35</td>
+      <td>721.65</td>
+      <td>6247642</td>
+      <td>4.508603e+09</td>
+      <td>162077</td>
+      <td>3950857</td>
+      <td>63.24</td>
+    </tr>
+    <tr>
+      <th>493</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>09-May-2019</td>
+      <td>719.35</td>
+      <td>719.15</td>
+      <td>730.30</td>
+      <td>715.8</td>
+      <td>722.00</td>
+      <td>721.05</td>
+      <td>724.48</td>
+      <td>7396525</td>
+      <td>5.358635e+09</td>
+      <td>242225</td>
+      <td>4808832</td>
+      <td>65.01</td>
+    </tr>
+    <tr>
+      <th>494</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>10-May-2019</td>
+      <td>721.05</td>
+      <td>720.80</td>
+      <td>726.00</td>
+      <td>715.0</td>
+      <td>716.50</td>
+      <td>716.85</td>
+      <td>717.88</td>
+      <td>8352335</td>
+      <td>5.995942e+09</td>
+      <td>181229</td>
+      <td>5545377</td>
+      <td>66.39</td>
+    </tr>
+    <tr>
+      <th>495</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>13-May-2019</td>
+      <td>716.85</td>
+      <td>716.55</td>
+      <td>726.45</td>
+      <td>712.1</td>
+      <td>718.00</td>
+      <td>719.70</td>
+      <td>720.09</td>
+      <td>6808993</td>
+      <td>4.903098e+09</td>
+      <td>201194</td>
+      <td>4745909</td>
+      <td>69.70</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+infy_data.loc[infy_data['Series']!='EQ']
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Symbol</th>
+      <th>Series</th>
+      <th>Date</th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>444</th>
+      <td>INFY</td>
+      <td>BL</td>
+      <td>25-Feb-2019</td>
+      <td>1220.15</td>
+      <td>734.95</td>
+      <td>734.95</td>
+      <td>734.95</td>
+      <td>734.95</td>
+      <td>734.95</td>
+      <td>734.95</td>
+      <td>1263230</td>
+      <td>9.284109e+08</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>462</th>
+      <td>INFY</td>
+      <td>BL</td>
+      <td>22-Mar-2019</td>
+      <td>734.95</td>
+      <td>738.95</td>
+      <td>738.95</td>
+      <td>738.95</td>
+      <td>738.95</td>
+      <td>738.95</td>
+      <td>738.95</td>
+      <td>1727935</td>
+      <td>1.276858e+09</td>
+      <td>1</td>
+      <td>1727935</td>
+      <td>100.0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+df=infy_data.loc[infy_data['Series']=='EQ']   #filtering 
+df.tail(55)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Symbol</th>
+      <th>Series</th>
+      <th>Date</th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>439</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>18-Feb-2019</td>
+      <td>741.95</td>
+      <td>742.35</td>
+      <td>747.65</td>
+      <td>736.00</td>
+      <td>741.00</td>
+      <td>741.05</td>
+      <td>739.90</td>
+      <td>5346825</td>
+      <td>3.956112e+09</td>
+      <td>105532</td>
+      <td>3060004</td>
+      <td>57.23</td>
+    </tr>
+    <tr>
+      <th>440</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>19-Feb-2019</td>
+      <td>741.05</td>
+      <td>739.10</td>
+      <td>740.55</td>
+      <td>721.30</td>
+      <td>724.00</td>
+      <td>724.30</td>
+      <td>726.70</td>
+      <td>9401334</td>
+      <td>6.831941e+09</td>
+      <td>124664</td>
+      <td>4041288</td>
+      <td>42.99</td>
+    </tr>
+    <tr>
+      <th>441</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>20-Feb-2019</td>
+      <td>724.30</td>
+      <td>727.00</td>
+      <td>743.00</td>
+      <td>726.05</td>
+      <td>740.55</td>
+      <td>740.70</td>
+      <td>734.78</td>
+      <td>5210675</td>
+      <td>3.828686e+09</td>
+      <td>130965</td>
+      <td>2558375</td>
+      <td>49.10</td>
+    </tr>
+    <tr>
+      <th>442</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>21-Feb-2019</td>
+      <td>740.70</td>
+      <td>738.00</td>
+      <td>738.00</td>
+      <td>727.10</td>
+      <td>734.00</td>
+      <td>733.45</td>
+      <td>732.23</td>
+      <td>7202786</td>
+      <td>5.274097e+09</td>
+      <td>151794</td>
+      <td>4504900</td>
+      <td>62.54</td>
+    </tr>
+    <tr>
+      <th>443</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>22-Feb-2019</td>
+      <td>733.45</td>
+      <td>732.50</td>
+      <td>738.20</td>
+      <td>728.00</td>
+      <td>734.90</td>
+      <td>734.95</td>
+      <td>733.71</td>
+      <td>3750833</td>
+      <td>2.752042e+09</td>
+      <td>99246</td>
+      <td>1775166</td>
+      <td>47.33</td>
+    </tr>
+    <tr>
+      <th>445</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>25-Feb-2019</td>
+      <td>734.95</td>
+      <td>735.55</td>
+      <td>758.00</td>
+      <td>735.55</td>
+      <td>755.00</td>
+      <td>754.90</td>
+      <td>749.20</td>
+      <td>6547552</td>
+      <td>4.905414e+09</td>
+      <td>155205</td>
+      <td>3296211</td>
+      <td>50.34</td>
+    </tr>
+    <tr>
+      <th>446</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>26-Feb-2019</td>
+      <td>754.90</td>
+      <td>748.60</td>
+      <td>752.60</td>
+      <td>740.15</td>
+      <td>741.55</td>
+      <td>742.50</td>
+      <td>745.77</td>
+      <td>8319610</td>
+      <td>6.204522e+09</td>
+      <td>188778</td>
+      <td>5101741</td>
+      <td>61.32</td>
+    </tr>
+    <tr>
+      <th>447</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>27-Feb-2019</td>
+      <td>742.50</td>
+      <td>745.00</td>
+      <td>746.40</td>
+      <td>732.75</td>
+      <td>734.50</td>
+      <td>735.25</td>
+      <td>738.56</td>
+      <td>5936354</td>
+      <td>4.384325e+09</td>
+      <td>181469</td>
+      <td>3554571</td>
+      <td>59.88</td>
+    </tr>
+    <tr>
+      <th>448</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>28-Feb-2019</td>
+      <td>735.25</td>
+      <td>738.70</td>
+      <td>742.40</td>
+      <td>732.30</td>
+      <td>734.70</td>
+      <td>734.30</td>
+      <td>735.59</td>
+      <td>8559921</td>
+      <td>6.296620e+09</td>
+      <td>142436</td>
+      <td>4612032</td>
+      <td>53.88</td>
+    </tr>
+    <tr>
+      <th>449</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>01-Mar-2019</td>
+      <td>734.30</td>
+      <td>735.50</td>
+      <td>743.40</td>
+      <td>735.50</td>
+      <td>741.80</td>
+      <td>741.90</td>
+      <td>740.00</td>
+      <td>3998826</td>
+      <td>2.959116e+09</td>
+      <td>86883</td>
+      <td>2141670</td>
+      <td>53.56</td>
+    </tr>
+    <tr>
+      <th>450</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>05-Mar-2019</td>
+      <td>741.90</td>
+      <td>740.50</td>
+      <td>742.50</td>
+      <td>730.25</td>
+      <td>732.75</td>
+      <td>732.50</td>
+      <td>734.79</td>
+      <td>4826505</td>
+      <td>3.546464e+09</td>
+      <td>187167</td>
+      <td>2953053</td>
+      <td>61.18</td>
+    </tr>
+    <tr>
+      <th>451</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>06-Mar-2019</td>
+      <td>732.50</td>
+      <td>736.10</td>
+      <td>736.10</td>
+      <td>727.00</td>
+      <td>732.25</td>
+      <td>732.50</td>
+      <td>732.02</td>
+      <td>6076668</td>
+      <td>4.448254e+09</td>
+      <td>201307</td>
+      <td>3216638</td>
+      <td>52.93</td>
+    </tr>
+    <tr>
+      <th>452</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>07-Mar-2019</td>
+      <td>732.50</td>
+      <td>734.00</td>
+      <td>734.50</td>
+      <td>720.55</td>
+      <td>723.30</td>
+      <td>722.95</td>
+      <td>724.84</td>
+      <td>5951551</td>
+      <td>4.313907e+09</td>
+      <td>132988</td>
+      <td>3097595</td>
+      <td>52.05</td>
+    </tr>
+    <tr>
+      <th>453</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>08-Mar-2019</td>
+      <td>722.95</td>
+      <td>722.95</td>
+      <td>722.95</td>
+      <td>710.65</td>
+      <td>713.20</td>
+      <td>712.35</td>
+      <td>714.77</td>
+      <td>7193994</td>
+      <td>5.142023e+09</td>
+      <td>154378</td>
+      <td>3414734</td>
+      <td>47.47</td>
+    </tr>
+    <tr>
+      <th>454</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>11-Mar-2019</td>
+      <td>712.35</td>
+      <td>713.30</td>
+      <td>718.50</td>
+      <td>709.40</td>
+      <td>711.05</td>
+      <td>711.25</td>
+      <td>712.07</td>
+      <td>9932198</td>
+      <td>7.072398e+09</td>
+      <td>173911</td>
+      <td>6593102</td>
+      <td>66.38</td>
+    </tr>
+    <tr>
+      <th>455</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>12-Mar-2019</td>
+      <td>711.25</td>
+      <td>709.00</td>
+      <td>714.95</td>
+      <td>705.60</td>
+      <td>706.75</td>
+      <td>706.95</td>
+      <td>708.99</td>
+      <td>11997387</td>
+      <td>8.505978e+09</td>
+      <td>224748</td>
+      <td>8806754</td>
+      <td>73.41</td>
+    </tr>
+    <tr>
+      <th>456</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>13-Mar-2019</td>
+      <td>706.95</td>
+      <td>710.00</td>
+      <td>718.60</td>
+      <td>706.30</td>
+      <td>709.00</td>
+      <td>708.45</td>
+      <td>710.81</td>
+      <td>11348867</td>
+      <td>8.066894e+09</td>
+      <td>183506</td>
+      <td>5754904</td>
+      <td>50.71</td>
+    </tr>
+    <tr>
+      <th>457</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>14-Mar-2019</td>
+      <td>708.45</td>
+      <td>714.00</td>
+      <td>714.90</td>
+      <td>706.20</td>
+      <td>708.45</td>
+      <td>708.35</td>
+      <td>710.02</td>
+      <td>6415187</td>
+      <td>4.554911e+09</td>
+      <td>158840</td>
+      <td>3794127</td>
+      <td>59.14</td>
+    </tr>
+    <tr>
+      <th>458</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>15-Mar-2019</td>
+      <td>708.35</td>
+      <td>712.00</td>
+      <td>723.75</td>
+      <td>709.60</td>
+      <td>720.00</td>
+      <td>718.55</td>
+      <td>717.57</td>
+      <td>14638664</td>
+      <td>1.050421e+10</td>
+      <td>174230</td>
+      <td>9286884</td>
+      <td>63.44</td>
+    </tr>
+    <tr>
+      <th>459</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>18-Mar-2019</td>
+      <td>718.55</td>
+      <td>721.55</td>
+      <td>723.70</td>
+      <td>705.35</td>
+      <td>709.50</td>
+      <td>710.20</td>
+      <td>715.00</td>
+      <td>8065544</td>
+      <td>5.766885e+09</td>
+      <td>169894</td>
+      <td>4656010</td>
+      <td>57.73</td>
+    </tr>
+    <tr>
+      <th>460</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>19-Mar-2019</td>
+      <td>710.20</td>
+      <td>712.80</td>
+      <td>726.50</td>
+      <td>707.40</td>
+      <td>725.90</td>
+      <td>722.25</td>
+      <td>715.22</td>
+      <td>8917337</td>
+      <td>6.377898e+09</td>
+      <td>165399</td>
+      <td>5704607</td>
+      <td>63.97</td>
+    </tr>
+    <tr>
+      <th>461</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>20-Mar-2019</td>
+      <td>722.25</td>
+      <td>727.25</td>
+      <td>742.30</td>
+      <td>727.15</td>
+      <td>737.80</td>
+      <td>738.95</td>
+      <td>737.53</td>
+      <td>13471173</td>
+      <td>9.935368e+09</td>
+      <td>368666</td>
+      <td>6929551</td>
+      <td>51.44</td>
+    </tr>
+    <tr>
+      <th>463</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>22-Mar-2019</td>
+      <td>738.95</td>
+      <td>745.00</td>
+      <td>746.35</td>
+      <td>732.30</td>
+      <td>745.00</td>
+      <td>743.10</td>
+      <td>741.40</td>
+      <td>8883260</td>
+      <td>6.586010e+09</td>
+      <td>186950</td>
+      <td>5182729</td>
+      <td>58.34</td>
+    </tr>
+    <tr>
+      <th>464</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>25-Mar-2019</td>
+      <td>743.10</td>
+      <td>742.40</td>
+      <td>742.40</td>
+      <td>730.55</td>
+      <td>733.95</td>
+      <td>735.25</td>
+      <td>735.24</td>
+      <td>7644966</td>
+      <td>5.620908e+09</td>
+      <td>150353</td>
+      <td>4078146</td>
+      <td>53.34</td>
+    </tr>
+    <tr>
+      <th>465</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>26-Mar-2019</td>
+      <td>735.25</td>
+      <td>735.25</td>
+      <td>735.25</td>
+      <td>719.10</td>
+      <td>727.80</td>
+      <td>727.75</td>
+      <td>724.65</td>
+      <td>9406261</td>
+      <td>6.816221e+09</td>
+      <td>220918</td>
+      <td>5868934</td>
+      <td>62.39</td>
+    </tr>
+    <tr>
+      <th>466</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>27-Mar-2019</td>
+      <td>727.75</td>
+      <td>730.00</td>
+      <td>732.30</td>
+      <td>727.15</td>
+      <td>728.90</td>
+      <td>729.70</td>
+      <td>730.32</td>
+      <td>7387487</td>
+      <td>5.395200e+09</td>
+      <td>122789</td>
+      <td>5505910</td>
+      <td>74.53</td>
+    </tr>
+    <tr>
+      <th>467</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>28-Mar-2019</td>
+      <td>729.70</td>
+      <td>730.00</td>
+      <td>745.00</td>
+      <td>730.00</td>
+      <td>739.10</td>
+      <td>737.80</td>
+      <td>739.73</td>
+      <td>9277241</td>
+      <td>6.862617e+09</td>
+      <td>187881</td>
+      <td>5521081</td>
+      <td>59.51</td>
+    </tr>
+    <tr>
+      <th>468</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>29-Mar-2019</td>
+      <td>737.80</td>
+      <td>743.90</td>
+      <td>747.95</td>
+      <td>740.00</td>
+      <td>742.15</td>
+      <td>743.85</td>
+      <td>743.49</td>
+      <td>6924061</td>
+      <td>5.147991e+09</td>
+      <td>155083</td>
+      <td>4592403</td>
+      <td>66.33</td>
+    </tr>
+    <tr>
+      <th>469</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>01-Apr-2019</td>
+      <td>743.85</td>
+      <td>742.00</td>
+      <td>760.00</td>
+      <td>742.00</td>
+      <td>753.75</td>
+      <td>755.10</td>
+      <td>754.32</td>
+      <td>6584982</td>
+      <td>4.967200e+09</td>
+      <td>149150</td>
+      <td>3788889</td>
+      <td>57.54</td>
+    </tr>
+    <tr>
+      <th>470</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>02-Apr-2019</td>
+      <td>755.10</td>
+      <td>759.00</td>
+      <td>765.80</td>
+      <td>754.60</td>
+      <td>755.00</td>
+      <td>759.40</td>
+      <td>760.56</td>
+      <td>7283600</td>
+      <td>5.539625e+09</td>
+      <td>169885</td>
+      <td>4249666</td>
+      <td>58.35</td>
+    </tr>
+    <tr>
+      <th>471</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>03-Apr-2019</td>
+      <td>759.40</td>
+      <td>756.00</td>
+      <td>758.50</td>
+      <td>746.80</td>
+      <td>751.65</td>
+      <td>753.30</td>
+      <td>752.48</td>
+      <td>6897127</td>
+      <td>5.189956e+09</td>
+      <td>200625</td>
+      <td>4213270</td>
+      <td>61.09</td>
+    </tr>
+    <tr>
+      <th>472</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>04-Apr-2019</td>
+      <td>753.30</td>
+      <td>751.40</td>
+      <td>753.80</td>
+      <td>745.10</td>
+      <td>748.95</td>
+      <td>747.90</td>
+      <td>748.43</td>
+      <td>7688525</td>
+      <td>5.754346e+09</td>
+      <td>178872</td>
+      <td>5138276</td>
+      <td>66.83</td>
+    </tr>
+    <tr>
+      <th>473</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>05-Apr-2019</td>
+      <td>747.90</td>
+      <td>750.90</td>
+      <td>760.95</td>
+      <td>748.00</td>
+      <td>759.55</td>
+      <td>759.30</td>
+      <td>758.69</td>
+      <td>6276040</td>
+      <td>4.761576e+09</td>
+      <td>148065</td>
+      <td>3851738</td>
+      <td>61.37</td>
+    </tr>
+    <tr>
+      <th>474</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>08-Apr-2019</td>
+      <td>759.30</td>
+      <td>763.05</td>
+      <td>770.00</td>
+      <td>755.40</td>
+      <td>769.15</td>
+      <td>767.25</td>
+      <td>762.80</td>
+      <td>4919911</td>
+      <td>3.752910e+09</td>
+      <td>143815</td>
+      <td>2380635</td>
+      <td>48.39</td>
+    </tr>
+    <tr>
+      <th>475</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>09-Apr-2019</td>
+      <td>767.25</td>
+      <td>770.00</td>
+      <td>773.00</td>
+      <td>758.20</td>
+      <td>760.80</td>
+      <td>760.60</td>
+      <td>765.16</td>
+      <td>6730692</td>
+      <td>5.150088e+09</td>
+      <td>146107</td>
+      <td>3353329</td>
+      <td>49.82</td>
+    </tr>
+    <tr>
+      <th>476</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>10-Apr-2019</td>
+      <td>760.60</td>
+      <td>764.00</td>
+      <td>766.70</td>
+      <td>751.30</td>
+      <td>752.85</td>
+      <td>752.70</td>
+      <td>759.53</td>
+      <td>7031088</td>
+      <td>5.340337e+09</td>
+      <td>134089</td>
+      <td>4201714</td>
+      <td>59.76</td>
+    </tr>
+    <tr>
+      <th>477</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>11-Apr-2019</td>
+      <td>752.70</td>
+      <td>751.75</td>
+      <td>751.75</td>
+      <td>740.05</td>
+      <td>743.40</td>
+      <td>742.70</td>
+      <td>744.27</td>
+      <td>8200995</td>
+      <td>6.103734e+09</td>
+      <td>158348</td>
+      <td>5047043</td>
+      <td>61.54</td>
+    </tr>
+    <tr>
+      <th>478</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>12-Apr-2019</td>
+      <td>742.70</td>
+      <td>743.10</td>
+      <td>751.55</td>
+      <td>740.60</td>
+      <td>748.00</td>
+      <td>747.75</td>
+      <td>746.82</td>
+      <td>7043212</td>
+      <td>5.260021e+09</td>
+      <td>165165</td>
+      <td>2587611</td>
+      <td>36.74</td>
+    </tr>
+    <tr>
+      <th>479</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>15-Apr-2019</td>
+      <td>747.75</td>
+      <td>724.70</td>
+      <td>731.35</td>
+      <td>712.60</td>
+      <td>728.20</td>
+      <td>727.50</td>
+      <td>724.58</td>
+      <td>31574803</td>
+      <td>2.287863e+10</td>
+      <td>566543</td>
+      <td>16753549</td>
+      <td>53.06</td>
+    </tr>
+    <tr>
+      <th>480</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>16-Apr-2019</td>
+      <td>727.50</td>
+      <td>727.90</td>
+      <td>727.90</td>
+      <td>714.10</td>
+      <td>724.00</td>
+      <td>724.10</td>
+      <td>722.40</td>
+      <td>12524411</td>
+      <td>9.047647e+09</td>
+      <td>343101</td>
+      <td>7260034</td>
+      <td>57.97</td>
+    </tr>
+    <tr>
+      <th>481</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>18-Apr-2019</td>
+      <td>724.10</td>
+      <td>722.50</td>
+      <td>722.50</td>
+      <td>712.75</td>
+      <td>715.70</td>
+      <td>717.05</td>
+      <td>716.80</td>
+      <td>13801105</td>
+      <td>9.892654e+09</td>
+      <td>302789</td>
+      <td>8498108</td>
+      <td>61.58</td>
+    </tr>
+    <tr>
+      <th>482</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>22-Apr-2019</td>
+      <td>717.05</td>
+      <td>717.05</td>
+      <td>725.75</td>
+      <td>715.00</td>
+      <td>721.30</td>
+      <td>721.05</td>
+      <td>721.04</td>
+      <td>6455426</td>
+      <td>4.654647e+09</td>
+      <td>115955</td>
+      <td>3535056</td>
+      <td>54.76</td>
+    </tr>
+    <tr>
+      <th>483</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>23-Apr-2019</td>
+      <td>721.05</td>
+      <td>723.90</td>
+      <td>730.00</td>
+      <td>718.40</td>
+      <td>725.80</td>
+      <td>728.20</td>
+      <td>726.32</td>
+      <td>5516668</td>
+      <td>4.006855e+09</td>
+      <td>130836</td>
+      <td>2893716</td>
+      <td>52.45</td>
+    </tr>
+    <tr>
+      <th>484</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>24-Apr-2019</td>
+      <td>728.20</td>
+      <td>728.20</td>
+      <td>737.90</td>
+      <td>724.00</td>
+      <td>735.00</td>
+      <td>736.45</td>
+      <td>733.43</td>
+      <td>8285120</td>
+      <td>6.076540e+09</td>
+      <td>174385</td>
+      <td>4993503</td>
+      <td>60.27</td>
+    </tr>
+    <tr>
+      <th>485</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>25-Apr-2019</td>
+      <td>736.45</td>
+      <td>736.45</td>
+      <td>737.65</td>
+      <td>727.05</td>
+      <td>730.05</td>
+      <td>728.55</td>
+      <td>730.72</td>
+      <td>8005235</td>
+      <td>5.849612e+09</td>
+      <td>174336</td>
+      <td>5361863</td>
+      <td>66.98</td>
+    </tr>
+    <tr>
+      <th>486</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>26-Apr-2019</td>
+      <td>728.55</td>
+      <td>731.00</td>
+      <td>739.80</td>
+      <td>729.00</td>
+      <td>738.60</td>
+      <td>738.00</td>
+      <td>736.11</td>
+      <td>6895168</td>
+      <td>5.075637e+09</td>
+      <td>151426</td>
+      <td>4168443</td>
+      <td>60.45</td>
+    </tr>
+    <tr>
+      <th>487</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>30-Apr-2019</td>
+      <td>738.00</td>
+      <td>738.00</td>
+      <td>753.80</td>
+      <td>738.00</td>
+      <td>748.85</td>
+      <td>751.35</td>
+      <td>748.61</td>
+      <td>9920046</td>
+      <td>7.426242e+09</td>
+      <td>165676</td>
+      <td>6888736</td>
+      <td>69.44</td>
+    </tr>
+    <tr>
+      <th>488</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>02-May-2019</td>
+      <td>751.35</td>
+      <td>747.00</td>
+      <td>748.40</td>
+      <td>729.50</td>
+      <td>730.80</td>
+      <td>730.80</td>
+      <td>738.19</td>
+      <td>6351352</td>
+      <td>4.688477e+09</td>
+      <td>115522</td>
+      <td>4071262</td>
+      <td>64.10</td>
+    </tr>
+    <tr>
+      <th>489</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>03-May-2019</td>
+      <td>730.80</td>
+      <td>722.90</td>
+      <td>731.00</td>
+      <td>718.20</td>
+      <td>723.65</td>
+      <td>723.60</td>
+      <td>725.26</td>
+      <td>6348116</td>
+      <td>4.604058e+09</td>
+      <td>133663</td>
+      <td>3735602</td>
+      <td>58.85</td>
+    </tr>
+    <tr>
+      <th>490</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>06-May-2019</td>
+      <td>723.60</td>
+      <td>715.00</td>
+      <td>721.80</td>
+      <td>710.65</td>
+      <td>717.15</td>
+      <td>718.40</td>
+      <td>718.07</td>
+      <td>8858265</td>
+      <td>6.360864e+09</td>
+      <td>148896</td>
+      <td>6519864</td>
+      <td>73.60</td>
+    </tr>
+    <tr>
+      <th>491</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>07-May-2019</td>
+      <td>718.40</td>
+      <td>720.40</td>
+      <td>727.90</td>
+      <td>718.70</td>
+      <td>724.40</td>
+      <td>724.55</td>
+      <td>724.51</td>
+      <td>5747536</td>
+      <td>4.164127e+09</td>
+      <td>104342</td>
+      <td>3690425</td>
+      <td>64.21</td>
+    </tr>
+    <tr>
+      <th>492</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>08-May-2019</td>
+      <td>724.55</td>
+      <td>721.00</td>
+      <td>726.00</td>
+      <td>716.50</td>
+      <td>718.95</td>
+      <td>719.35</td>
+      <td>721.65</td>
+      <td>6247642</td>
+      <td>4.508603e+09</td>
+      <td>162077</td>
+      <td>3950857</td>
+      <td>63.24</td>
+    </tr>
+    <tr>
+      <th>493</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>09-May-2019</td>
+      <td>719.35</td>
+      <td>719.15</td>
+      <td>730.30</td>
+      <td>715.80</td>
+      <td>722.00</td>
+      <td>721.05</td>
+      <td>724.48</td>
+      <td>7396525</td>
+      <td>5.358635e+09</td>
+      <td>242225</td>
+      <td>4808832</td>
+      <td>65.01</td>
+    </tr>
+    <tr>
+      <th>494</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>10-May-2019</td>
+      <td>721.05</td>
+      <td>720.80</td>
+      <td>726.00</td>
+      <td>715.00</td>
+      <td>716.50</td>
+      <td>716.85</td>
+      <td>717.88</td>
+      <td>8352335</td>
+      <td>5.995942e+09</td>
+      <td>181229</td>
+      <td>5545377</td>
+      <td>66.39</td>
+    </tr>
+    <tr>
+      <th>495</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>13-May-2019</td>
+      <td>716.85</td>
+      <td>716.55</td>
+      <td>726.45</td>
+      <td>712.10</td>
+      <td>718.00</td>
+      <td>719.70</td>
+      <td>720.09</td>
+      <td>6808993</td>
+      <td>4.903098e+09</td>
+      <td>201194</td>
+      <td>4745909</td>
+      <td>69.70</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+df.describe()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>4.940000e+02</td>
+      <td>4.940000e+02</td>
+      <td>4.940000e+02</td>
+      <td>4.940000e+02</td>
+      <td>494.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>961.440789</td>
+      <td>961.070040</td>
+      <td>971.092713</td>
+      <td>951.052733</td>
+      <td>960.845648</td>
+      <td>960.945749</td>
+      <td>961.166498</td>
+      <td>6.056365e+06</td>
+      <td>5.469840e+09</td>
+      <td>1.361482e+05</td>
+      <td>3.605878e+06</td>
+      <td>61.759008</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>220.761549</td>
+      <td>220.091227</td>
+      <td>222.968974</td>
+      <td>218.714372</td>
+      <td>220.968590</td>
+      <td>221.029267</td>
+      <td>221.102384</td>
+      <td>5.451445e+06</td>
+      <td>4.770342e+09</td>
+      <td>8.557589e+04</td>
+      <td>2.840733e+06</td>
+      <td>9.924135</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>619.100000</td>
+      <td>621.000000</td>
+      <td>628.000000</td>
+      <td>599.850000</td>
+      <td>619.500000</td>
+      <td>619.100000</td>
+      <td>613.780000</td>
+      <td>5.457170e+05</td>
+      <td>5.060941e+08</td>
+      <td>1.388600e+04</td>
+      <td>3.077410e+05</td>
+      <td>26.380000</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>735.025000</td>
+      <td>736.187500</td>
+      <td>742.700000</td>
+      <td>729.012500</td>
+      <td>734.125000</td>
+      <td>734.462500</td>
+      <td>735.720000</td>
+      <td>3.148044e+06</td>
+      <td>3.350973e+09</td>
+      <td>9.246300e+04</td>
+      <td>2.064895e+06</td>
+      <td>55.142500</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>956.750000</td>
+      <td>957.525000</td>
+      <td>964.775000</td>
+      <td>948.000000</td>
+      <td>956.025000</td>
+      <td>955.975000</td>
+      <td>955.060000</td>
+      <td>4.905804e+06</td>
+      <td>4.601808e+09</td>
+      <td>1.197605e+05</td>
+      <td>3.053880e+06</td>
+      <td>62.270000</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>1150.150000</td>
+      <td>1145.412500</td>
+      <td>1161.675000</td>
+      <td>1135.962500</td>
+      <td>1147.950000</td>
+      <td>1150.150000</td>
+      <td>1148.280000</td>
+      <td>7.303918e+06</td>
+      <td>6.042062e+09</td>
+      <td>1.551745e+05</td>
+      <td>4.332777e+06</td>
+      <td>68.767500</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>1441.100000</td>
+      <td>1449.000000</td>
+      <td>1467.900000</td>
+      <td>1430.000000</td>
+      <td>1440.000000</td>
+      <td>1441.100000</td>
+      <td>1451.300000</td>
+      <td>8.220248e+07</td>
+      <td>7.662502e+10</td>
+      <td>1.192900e+06</td>
+      <td>4.202849e+07</td>
+      <td>88.700000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+df.info()
+```
+
+    <class 'pandas.core.frame.DataFrame'>
+    Int64Index: 494 entries, 0 to 495
+    Data columns (total 15 columns):
+    Symbol                    494 non-null object
+    Series                    494 non-null object
+    Date                      494 non-null object
+    Prev Close                494 non-null float64
+    Open Price                494 non-null float64
+    High Price                494 non-null float64
+    Low Price                 494 non-null float64
+    Last Price                494 non-null float64
+    Close Price               494 non-null float64
+    Average Price             494 non-null float64
+    Total Traded Quantity     494 non-null int64
+    Turnover                  494 non-null float64
+    No. of Trades             494 non-null int64
+    Deliverable Qty           494 non-null int64
+    % Dly Qt to Traded Qty    494 non-null float64
+    dtypes: float64(9), int64(3), object(3)
+    memory usage: 61.8+ KB
+
+
+
+```python
+df.isnull()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Symbol</th>
+      <th>Series</th>
+      <th>Date</th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>466</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>467</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>468</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>469</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>470</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>471</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>472</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>473</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>474</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>475</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>476</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>477</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>478</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>479</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>480</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>481</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>482</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>483</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>484</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>485</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>486</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>487</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>488</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>489</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>490</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>491</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>492</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>493</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>494</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+    <tr>
+      <th>495</th>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+      <td>False</td>
+    </tr>
+  </tbody>
+</table>
+<p>494 rows × 15 columns</p>
+</div>
+
+
+
+### Query 1.2
+Calculate the maximum, minimum and mean price for the last 90 days. (price=Closing Price unless stated otherwise)
+
+**This is the expected format of the answer notebook**
+
+
+```python
+df1=df.iloc[ : ,[2,8]]
+last_90_days=df1.tail(90)
+last_90_days.info()
+```
+
+    <class 'pandas.core.frame.DataFrame'>
+    Int64Index: 90 entries, 404 to 495
+    Data columns (total 2 columns):
+    Date           90 non-null object
+    Close Price    90 non-null float64
+    dtypes: float64(1), object(1)
+    memory usage: 2.1+ KB
+
+
+
+```python
+last_90_days.min()
+```
+
+
+
+
+    Date           01-Apr-2019
+    Close Price         658.95
+    dtype: object
+
+
+
+
+```python
+last_90_days.max()
+```
+
+
+
+
+    Date           31-Jan-2019
+    Close Price         767.25
+    dtype: object
+
+
+
+
+```python
+last_90_days.mean()
+```
+
+
+
+
+    Close Price    728.602778
+    dtype: float64
+
+
+
+Query 1.3
+
+Analyse the data type for each column od the dataframe.Pandas Knows how to deal with dates in an intelligent manner. But to make use of pandas functionality for dates, you need to ensure that the column is of type 'datetimes64(ns)'. Changes the date column from object type to datetime64(ns) for future convenience. see what happens if you subtract the minimum value of the date column from the maximum value
+
+
+```python
+df['Date']=pd.to_datetime(df['Date'])
+df.dtypes
+
+
+```
+
+
+
+
+    Symbol                            object
+    Series                            object
+    Date                      datetime64[ns]
+    Prev Close                       float64
+    Open Price                       float64
+    High Price                       float64
+    Low Price                        float64
+    Last Price                       float64
+    Close Price                      float64
+    Average Price                    float64
+    Total Traded Quantity              int64
+    Turnover                         float64
+    No. of Trades                      int64
+    Deliverable Qty                    int64
+    % Dly Qt to Traded Qty           float64
+    dtype: object
+
+
+
+
+```python
+max_date = df['Date'].max()
+print(max_date)
+
+min_date = df['Date'].min()
+print(min_date)
+
+sub = max_date - min_date
+print(sub)
+```
+
+    2019-05-13 00:00:00
+    2017-05-15 00:00:00
+    728 days 00:00:00
+
+
+# Query 1.4
+
+In a separate array, calulate the monthwise VWAP( Volume Weighted Average Price) of stock. (VWAP = sum(price*volume)/sum(volume)). 
+{Hint: Create a new dataframe column 'Month'. The value for this column can be derived from the 'date' column by using appropriate pandas function.
+Similarly, create a column 'year' and initialize it. then use the 'groupby()' function by month and year. Finally, calculate the vwap value for each month.(i.e. for each group created).
+
+
+```python
+import datetime as dt
+```
+
+
+```python
+df['Month']=df['Date'].dt.strftime('%m')
+df['Year']=df['Date'].dt.strftime('%Y')
+df.head(50)
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Symbol</th>
+      <th>Series</th>
+      <th>Date</th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+      <th>Month</th>
+      <th>Year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-15</td>
+      <td>964.25</td>
+      <td>963.50</td>
+      <td>963.50</td>
+      <td>949.10</td>
+      <td>953.25</td>
+      <td>951.55</td>
+      <td>951.49</td>
+      <td>3648582</td>
+      <td>3.471580e+09</td>
+      <td>75335</td>
+      <td>3052819</td>
+      <td>83.67</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-16</td>
+      <td>951.55</td>
+      <td>953.10</td>
+      <td>960.15</td>
+      <td>946.95</td>
+      <td>956.00</td>
+      <td>955.00</td>
+      <td>952.92</td>
+      <td>3065084</td>
+      <td>2.920775e+09</td>
+      <td>71808</td>
+      <td>1858063</td>
+      <td>60.62</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-17</td>
+      <td>955.00</td>
+      <td>951.60</td>
+      <td>958.45</td>
+      <td>943.85</td>
+      <td>952.90</td>
+      <td>952.80</td>
+      <td>949.48</td>
+      <td>1457754</td>
+      <td>1.384110e+09</td>
+      <td>75429</td>
+      <td>792251</td>
+      <td>54.35</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-18</td>
+      <td>952.80</td>
+      <td>943.00</td>
+      <td>973.90</td>
+      <td>942.85</td>
+      <td>960.25</td>
+      <td>961.75</td>
+      <td>962.61</td>
+      <td>4028924</td>
+      <td>3.878282e+09</td>
+      <td>120990</td>
+      <td>2309450</td>
+      <td>57.32</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-19</td>
+      <td>961.75</td>
+      <td>961.50</td>
+      <td>962.70</td>
+      <td>947.85</td>
+      <td>957.40</td>
+      <td>957.95</td>
+      <td>954.18</td>
+      <td>2128698</td>
+      <td>2.031155e+09</td>
+      <td>88897</td>
+      <td>1457747</td>
+      <td>68.48</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-22</td>
+      <td>957.95</td>
+      <td>958.40</td>
+      <td>966.90</td>
+      <td>956.55</td>
+      <td>960.00</td>
+      <td>961.45</td>
+      <td>962.29</td>
+      <td>2751526</td>
+      <td>2.647755e+09</td>
+      <td>99616</td>
+      <td>2034031</td>
+      <td>73.92</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-23</td>
+      <td>961.45</td>
+      <td>964.65</td>
+      <td>967.00</td>
+      <td>954.10</td>
+      <td>957.50</td>
+      <td>957.30</td>
+      <td>960.16</td>
+      <td>2019991</td>
+      <td>1.939515e+09</td>
+      <td>80122</td>
+      <td>1436389</td>
+      <td>71.11</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-24</td>
+      <td>957.30</td>
+      <td>960.00</td>
+      <td>965.50</td>
+      <td>949.60</td>
+      <td>957.00</td>
+      <td>954.80</td>
+      <td>958.37</td>
+      <td>2818143</td>
+      <td>2.700827e+09</td>
+      <td>56898</td>
+      <td>1913750</td>
+      <td>67.91</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-25</td>
+      <td>954.80</td>
+      <td>961.00</td>
+      <td>986.60</td>
+      <td>961.00</td>
+      <td>981.00</td>
+      <td>983.30</td>
+      <td>978.16</td>
+      <td>5219257</td>
+      <td>5.105250e+09</td>
+      <td>76160</td>
+      <td>4108984</td>
+      <td>78.73</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-26</td>
+      <td>983.30</td>
+      <td>987.00</td>
+      <td>1000.00</td>
+      <td>980.60</td>
+      <td>996.05</td>
+      <td>995.70</td>
+      <td>994.06</td>
+      <td>2494002</td>
+      <td>2.479194e+09</td>
+      <td>63671</td>
+      <td>1477643</td>
+      <td>59.25</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-29</td>
+      <td>995.70</td>
+      <td>990.90</td>
+      <td>996.70</td>
+      <td>975.70</td>
+      <td>986.00</td>
+      <td>985.15</td>
+      <td>983.11</td>
+      <td>3154217</td>
+      <td>3.100929e+09</td>
+      <td>83084</td>
+      <td>2272869</td>
+      <td>72.06</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-30</td>
+      <td>985.15</td>
+      <td>982.00</td>
+      <td>1000.00</td>
+      <td>978.65</td>
+      <td>993.00</td>
+      <td>996.20</td>
+      <td>995.45</td>
+      <td>1858455</td>
+      <td>1.850004e+09</td>
+      <td>62012</td>
+      <td>1280033</td>
+      <td>68.88</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-31</td>
+      <td>996.20</td>
+      <td>993.55</td>
+      <td>993.55</td>
+      <td>974.85</td>
+      <td>976.05</td>
+      <td>977.05</td>
+      <td>980.19</td>
+      <td>3881950</td>
+      <td>3.805051e+09</td>
+      <td>121323</td>
+      <td>3086038</td>
+      <td>79.50</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-01</td>
+      <td>977.05</td>
+      <td>969.30</td>
+      <td>979.70</td>
+      <td>958.55</td>
+      <td>971.25</td>
+      <td>971.40</td>
+      <td>969.49</td>
+      <td>2754303</td>
+      <td>2.670263e+09</td>
+      <td>81421</td>
+      <td>1822506</td>
+      <td>66.17</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-02</td>
+      <td>971.40</td>
+      <td>973.40</td>
+      <td>975.45</td>
+      <td>964.20</td>
+      <td>966.00</td>
+      <td>969.45</td>
+      <td>968.76</td>
+      <td>1958983</td>
+      <td>1.897793e+09</td>
+      <td>48927</td>
+      <td>1396644</td>
+      <td>71.29</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-05</td>
+      <td>969.45</td>
+      <td>970.00</td>
+      <td>972.00</td>
+      <td>957.05</td>
+      <td>959.00</td>
+      <td>958.75</td>
+      <td>961.71</td>
+      <td>2731349</td>
+      <td>2.626761e+09</td>
+      <td>83794</td>
+      <td>1941199</td>
+      <td>71.07</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-06</td>
+      <td>958.75</td>
+      <td>965.00</td>
+      <td>987.50</td>
+      <td>964.40</td>
+      <td>980.00</td>
+      <td>979.35</td>
+      <td>980.08</td>
+      <td>3504343</td>
+      <td>3.434526e+09</td>
+      <td>83178</td>
+      <td>2018029</td>
+      <td>57.59</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-07</td>
+      <td>979.35</td>
+      <td>985.00</td>
+      <td>988.90</td>
+      <td>945.00</td>
+      <td>959.30</td>
+      <td>961.30</td>
+      <td>963.75</td>
+      <td>6227523</td>
+      <td>6.001805e+09</td>
+      <td>139990</td>
+      <td>2519343</td>
+      <td>40.45</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-08</td>
+      <td>961.30</td>
+      <td>962.95</td>
+      <td>962.95</td>
+      <td>948.15</td>
+      <td>956.05</td>
+      <td>956.45</td>
+      <td>952.81</td>
+      <td>3097676</td>
+      <td>2.951502e+09</td>
+      <td>88147</td>
+      <td>1778850</td>
+      <td>57.43</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-09</td>
+      <td>956.45</td>
+      <td>938.55</td>
+      <td>950.95</td>
+      <td>923.00</td>
+      <td>949.00</td>
+      <td>948.60</td>
+      <td>937.55</td>
+      <td>7378831</td>
+      <td>6.918028e+09</td>
+      <td>161124</td>
+      <td>3054942</td>
+      <td>41.40</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-12</td>
+      <td>948.60</td>
+      <td>943.35</td>
+      <td>965.20</td>
+      <td>940.10</td>
+      <td>964.40</td>
+      <td>963.85</td>
+      <td>953.95</td>
+      <td>4295838</td>
+      <td>4.097997e+09</td>
+      <td>89686</td>
+      <td>2215716</td>
+      <td>51.58</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-13</td>
+      <td>963.85</td>
+      <td>953.50</td>
+      <td>962.95</td>
+      <td>951.60</td>
+      <td>957.95</td>
+      <td>957.80</td>
+      <td>958.26</td>
+      <td>2468897</td>
+      <td>2.365834e+09</td>
+      <td>69355</td>
+      <td>1449584</td>
+      <td>58.71</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-14</td>
+      <td>957.80</td>
+      <td>960.00</td>
+      <td>961.90</td>
+      <td>951.20</td>
+      <td>958.50</td>
+      <td>958.60</td>
+      <td>957.02</td>
+      <td>3719055</td>
+      <td>3.559195e+09</td>
+      <td>90312</td>
+      <td>2710765</td>
+      <td>72.89</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-15</td>
+      <td>958.60</td>
+      <td>959.65</td>
+      <td>967.95</td>
+      <td>949.60</td>
+      <td>951.35</td>
+      <td>952.10</td>
+      <td>956.12</td>
+      <td>2764031</td>
+      <td>2.642753e+09</td>
+      <td>67490</td>
+      <td>1852460</td>
+      <td>67.02</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-16</td>
+      <td>952.10</td>
+      <td>949.10</td>
+      <td>953.85</td>
+      <td>936.00</td>
+      <td>937.00</td>
+      <td>940.25</td>
+      <td>942.47</td>
+      <td>5474225</td>
+      <td>5.159269e+09</td>
+      <td>109487</td>
+      <td>4241070</td>
+      <td>77.47</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-19</td>
+      <td>940.25</td>
+      <td>939.95</td>
+      <td>940.25</td>
+      <td>928.00</td>
+      <td>930.80</td>
+      <td>929.85</td>
+      <td>931.98</td>
+      <td>3427930</td>
+      <td>3.194760e+09</td>
+      <td>82075</td>
+      <td>2297829</td>
+      <td>67.03</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-20</td>
+      <td>929.85</td>
+      <td>935.00</td>
+      <td>946.90</td>
+      <td>934.05</td>
+      <td>944.25</td>
+      <td>943.55</td>
+      <td>943.01</td>
+      <td>2592198</td>
+      <td>2.444472e+09</td>
+      <td>105790</td>
+      <td>1509148</td>
+      <td>58.22</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-21</td>
+      <td>943.55</td>
+      <td>945.00</td>
+      <td>949.00</td>
+      <td>936.05</td>
+      <td>948.55</td>
+      <td>943.35</td>
+      <td>941.04</td>
+      <td>1867932</td>
+      <td>1.757792e+09</td>
+      <td>59945</td>
+      <td>1286468</td>
+      <td>68.87</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-22</td>
+      <td>943.35</td>
+      <td>947.70</td>
+      <td>968.70</td>
+      <td>935.10</td>
+      <td>939.00</td>
+      <td>940.15</td>
+      <td>953.78</td>
+      <td>4732621</td>
+      <td>4.513896e+09</td>
+      <td>115123</td>
+      <td>2848768</td>
+      <td>60.19</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-23</td>
+      <td>940.15</td>
+      <td>945.00</td>
+      <td>949.15</td>
+      <td>938.00</td>
+      <td>943.05</td>
+      <td>943.25</td>
+      <td>943.77</td>
+      <td>3201509</td>
+      <td>3.021489e+09</td>
+      <td>118944</td>
+      <td>2359021</td>
+      <td>73.68</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-27</td>
+      <td>943.25</td>
+      <td>945.00</td>
+      <td>948.00</td>
+      <td>923.75</td>
+      <td>926.00</td>
+      <td>927.05</td>
+      <td>929.06</td>
+      <td>3452330</td>
+      <td>3.207420e+09</td>
+      <td>113272</td>
+      <td>2392340</td>
+      <td>69.30</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>31</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-28</td>
+      <td>927.05</td>
+      <td>932.80</td>
+      <td>933.00</td>
+      <td>921.00</td>
+      <td>924.00</td>
+      <td>924.70</td>
+      <td>925.73</td>
+      <td>2952612</td>
+      <td>2.733310e+09</td>
+      <td>98295</td>
+      <td>2094305</td>
+      <td>70.93</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>32</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-29</td>
+      <td>924.70</td>
+      <td>930.20</td>
+      <td>947.95</td>
+      <td>926.60</td>
+      <td>929.00</td>
+      <td>930.20</td>
+      <td>935.13</td>
+      <td>7957020</td>
+      <td>7.440838e+09</td>
+      <td>103952</td>
+      <td>5660732</td>
+      <td>71.14</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>33</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-30</td>
+      <td>930.20</td>
+      <td>930.80</td>
+      <td>938.00</td>
+      <td>929.00</td>
+      <td>934.40</td>
+      <td>935.55</td>
+      <td>934.42</td>
+      <td>2108350</td>
+      <td>1.970090e+09</td>
+      <td>64325</td>
+      <td>1526984</td>
+      <td>72.43</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-03</td>
+      <td>935.55</td>
+      <td>941.10</td>
+      <td>955.00</td>
+      <td>934.60</td>
+      <td>953.60</td>
+      <td>951.90</td>
+      <td>945.66</td>
+      <td>2544462</td>
+      <td>2.406192e+09</td>
+      <td>62128</td>
+      <td>1419172</td>
+      <td>55.77</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-04</td>
+      <td>951.90</td>
+      <td>953.85</td>
+      <td>970.00</td>
+      <td>949.40</td>
+      <td>961.00</td>
+      <td>962.15</td>
+      <td>962.03</td>
+      <td>2583863</td>
+      <td>2.485762e+09</td>
+      <td>54690</td>
+      <td>1493619</td>
+      <td>57.81</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-05</td>
+      <td>962.15</td>
+      <td>959.00</td>
+      <td>959.00</td>
+      <td>945.40</td>
+      <td>952.00</td>
+      <td>950.90</td>
+      <td>950.46</td>
+      <td>2113114</td>
+      <td>2.008422e+09</td>
+      <td>58308</td>
+      <td>1201934</td>
+      <td>56.88</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-06</td>
+      <td>950.90</td>
+      <td>945.00</td>
+      <td>957.00</td>
+      <td>944.20</td>
+      <td>946.80</td>
+      <td>947.00</td>
+      <td>950.12</td>
+      <td>1914860</td>
+      <td>1.819345e+09</td>
+      <td>56849</td>
+      <td>1143132</td>
+      <td>59.70</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-07</td>
+      <td>947.00</td>
+      <td>943.85</td>
+      <td>945.45</td>
+      <td>933.05</td>
+      <td>935.10</td>
+      <td>935.40</td>
+      <td>938.78</td>
+      <td>2888443</td>
+      <td>2.711622e+09</td>
+      <td>98641</td>
+      <td>2118035</td>
+      <td>73.33</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>39</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-10</td>
+      <td>935.40</td>
+      <td>945.00</td>
+      <td>1028.90</td>
+      <td>937.30</td>
+      <td>953.30</td>
+      <td>957.05</td>
+      <td>953.49</td>
+      <td>847546</td>
+      <td>8.081252e+08</td>
+      <td>17862</td>
+      <td>426402</td>
+      <td>50.31</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>40</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-11</td>
+      <td>957.05</td>
+      <td>956.65</td>
+      <td>989.50</td>
+      <td>956.65</td>
+      <td>978.60</td>
+      <td>975.35</td>
+      <td>978.98</td>
+      <td>5769854</td>
+      <td>5.648578e+09</td>
+      <td>113632</td>
+      <td>3220051</td>
+      <td>55.81</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>41</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-12</td>
+      <td>975.35</td>
+      <td>974.95</td>
+      <td>981.50</td>
+      <td>968.75</td>
+      <td>973.00</td>
+      <td>972.35</td>
+      <td>974.41</td>
+      <td>3137988</td>
+      <td>3.057673e+09</td>
+      <td>77201</td>
+      <td>2147850</td>
+      <td>68.45</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>42</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-13</td>
+      <td>972.35</td>
+      <td>977.25</td>
+      <td>983.45</td>
+      <td>964.10</td>
+      <td>980.00</td>
+      <td>977.05</td>
+      <td>977.00</td>
+      <td>2585196</td>
+      <td>2.525725e+09</td>
+      <td>74502</td>
+      <td>1139208</td>
+      <td>44.07</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>43</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-14</td>
+      <td>977.05</td>
+      <td>999.45</td>
+      <td>1006.85</td>
+      <td>966.05</td>
+      <td>970.00</td>
+      <td>972.05</td>
+      <td>985.55</td>
+      <td>11239090</td>
+      <td>1.107670e+10</td>
+      <td>246571</td>
+      <td>4902877</td>
+      <td>43.62</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>44</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-17</td>
+      <td>972.05</td>
+      <td>975.00</td>
+      <td>992.00</td>
+      <td>974.00</td>
+      <td>985.55</td>
+      <td>984.05</td>
+      <td>984.54</td>
+      <td>3849125</td>
+      <td>3.789602e+09</td>
+      <td>85783</td>
+      <td>2209178</td>
+      <td>57.39</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>45</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-18</td>
+      <td>984.05</td>
+      <td>986.05</td>
+      <td>1004.80</td>
+      <td>981.10</td>
+      <td>983.65</td>
+      <td>985.60</td>
+      <td>995.69</td>
+      <td>4130090</td>
+      <td>4.112296e+09</td>
+      <td>93509</td>
+      <td>2299835</td>
+      <td>55.68</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>46</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-19</td>
+      <td>985.60</td>
+      <td>981.45</td>
+      <td>988.65</td>
+      <td>969.10</td>
+      <td>979.60</td>
+      <td>979.85</td>
+      <td>976.12</td>
+      <td>2945139</td>
+      <td>2.874802e+09</td>
+      <td>105595</td>
+      <td>1545101</td>
+      <td>52.46</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>47</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-20</td>
+      <td>979.85</td>
+      <td>979.30</td>
+      <td>979.85</td>
+      <td>966.95</td>
+      <td>969.00</td>
+      <td>969.45</td>
+      <td>970.69</td>
+      <td>3404870</td>
+      <td>3.305086e+09</td>
+      <td>101526</td>
+      <td>2486394</td>
+      <td>73.02</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>48</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-21</td>
+      <td>969.45</td>
+      <td>973.00</td>
+      <td>982.55</td>
+      <td>971.40</td>
+      <td>979.90</td>
+      <td>980.10</td>
+      <td>978.45</td>
+      <td>2990377</td>
+      <td>2.925922e+09</td>
+      <td>68179</td>
+      <td>1923535</td>
+      <td>64.32</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>49</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-24</td>
+      <td>980.10</td>
+      <td>983.50</td>
+      <td>994.00</td>
+      <td>982.60</td>
+      <td>990.50</td>
+      <td>990.55</td>
+      <td>989.58</td>
+      <td>3064588</td>
+      <td>3.032647e+09</td>
+      <td>110820</td>
+      <td>2177458</td>
+      <td>71.05</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+group=df.groupby(['Month','Year'])
+group.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Symbol</th>
+      <th>Series</th>
+      <th>Date</th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+      <th>Month</th>
+      <th>Year</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-15</td>
+      <td>964.25</td>
+      <td>963.50</td>
+      <td>963.50</td>
+      <td>949.10</td>
+      <td>953.25</td>
+      <td>951.55</td>
+      <td>951.49</td>
+      <td>3648582</td>
+      <td>3.471580e+09</td>
+      <td>75335</td>
+      <td>3052819</td>
+      <td>83.67</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-16</td>
+      <td>951.55</td>
+      <td>953.10</td>
+      <td>960.15</td>
+      <td>946.95</td>
+      <td>956.00</td>
+      <td>955.00</td>
+      <td>952.92</td>
+      <td>3065084</td>
+      <td>2.920775e+09</td>
+      <td>71808</td>
+      <td>1858063</td>
+      <td>60.62</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-17</td>
+      <td>955.00</td>
+      <td>951.60</td>
+      <td>958.45</td>
+      <td>943.85</td>
+      <td>952.90</td>
+      <td>952.80</td>
+      <td>949.48</td>
+      <td>1457754</td>
+      <td>1.384110e+09</td>
+      <td>75429</td>
+      <td>792251</td>
+      <td>54.35</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-18</td>
+      <td>952.80</td>
+      <td>943.00</td>
+      <td>973.90</td>
+      <td>942.85</td>
+      <td>960.25</td>
+      <td>961.75</td>
+      <td>962.61</td>
+      <td>4028924</td>
+      <td>3.878282e+09</td>
+      <td>120990</td>
+      <td>2309450</td>
+      <td>57.32</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-19</td>
+      <td>961.75</td>
+      <td>961.50</td>
+      <td>962.70</td>
+      <td>947.85</td>
+      <td>957.40</td>
+      <td>957.95</td>
+      <td>954.18</td>
+      <td>2128698</td>
+      <td>2.031155e+09</td>
+      <td>88897</td>
+      <td>1457747</td>
+      <td>68.48</td>
+      <td>05</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-01</td>
+      <td>977.05</td>
+      <td>969.30</td>
+      <td>979.70</td>
+      <td>958.55</td>
+      <td>971.25</td>
+      <td>971.40</td>
+      <td>969.49</td>
+      <td>2754303</td>
+      <td>2.670263e+09</td>
+      <td>81421</td>
+      <td>1822506</td>
+      <td>66.17</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-02</td>
+      <td>971.40</td>
+      <td>973.40</td>
+      <td>975.45</td>
+      <td>964.20</td>
+      <td>966.00</td>
+      <td>969.45</td>
+      <td>968.76</td>
+      <td>1958983</td>
+      <td>1.897793e+09</td>
+      <td>48927</td>
+      <td>1396644</td>
+      <td>71.29</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-05</td>
+      <td>969.45</td>
+      <td>970.00</td>
+      <td>972.00</td>
+      <td>957.05</td>
+      <td>959.00</td>
+      <td>958.75</td>
+      <td>961.71</td>
+      <td>2731349</td>
+      <td>2.626761e+09</td>
+      <td>83794</td>
+      <td>1941199</td>
+      <td>71.07</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-06</td>
+      <td>958.75</td>
+      <td>965.00</td>
+      <td>987.50</td>
+      <td>964.40</td>
+      <td>980.00</td>
+      <td>979.35</td>
+      <td>980.08</td>
+      <td>3504343</td>
+      <td>3.434526e+09</td>
+      <td>83178</td>
+      <td>2018029</td>
+      <td>57.59</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-07</td>
+      <td>979.35</td>
+      <td>985.00</td>
+      <td>988.90</td>
+      <td>945.00</td>
+      <td>959.30</td>
+      <td>961.30</td>
+      <td>963.75</td>
+      <td>6227523</td>
+      <td>6.001805e+09</td>
+      <td>139990</td>
+      <td>2519343</td>
+      <td>40.45</td>
+      <td>06</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>34</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-03</td>
+      <td>935.55</td>
+      <td>941.10</td>
+      <td>955.00</td>
+      <td>934.60</td>
+      <td>953.60</td>
+      <td>951.90</td>
+      <td>945.66</td>
+      <td>2544462</td>
+      <td>2.406192e+09</td>
+      <td>62128</td>
+      <td>1419172</td>
+      <td>55.77</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>35</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-04</td>
+      <td>951.90</td>
+      <td>953.85</td>
+      <td>970.00</td>
+      <td>949.40</td>
+      <td>961.00</td>
+      <td>962.15</td>
+      <td>962.03</td>
+      <td>2583863</td>
+      <td>2.485762e+09</td>
+      <td>54690</td>
+      <td>1493619</td>
+      <td>57.81</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>36</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-05</td>
+      <td>962.15</td>
+      <td>959.00</td>
+      <td>959.00</td>
+      <td>945.40</td>
+      <td>952.00</td>
+      <td>950.90</td>
+      <td>950.46</td>
+      <td>2113114</td>
+      <td>2.008422e+09</td>
+      <td>58308</td>
+      <td>1201934</td>
+      <td>56.88</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>37</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-06</td>
+      <td>950.90</td>
+      <td>945.00</td>
+      <td>957.00</td>
+      <td>944.20</td>
+      <td>946.80</td>
+      <td>947.00</td>
+      <td>950.12</td>
+      <td>1914860</td>
+      <td>1.819345e+09</td>
+      <td>56849</td>
+      <td>1143132</td>
+      <td>59.70</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>38</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-07-07</td>
+      <td>947.00</td>
+      <td>943.85</td>
+      <td>945.45</td>
+      <td>933.05</td>
+      <td>935.10</td>
+      <td>935.40</td>
+      <td>938.78</td>
+      <td>2888443</td>
+      <td>2.711622e+09</td>
+      <td>98641</td>
+      <td>2118035</td>
+      <td>73.33</td>
+      <td>07</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>55</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-08-01</td>
+      <td>1011.20</td>
+      <td>1011.00</td>
+      <td>1017.00</td>
+      <td>998.35</td>
+      <td>1004.50</td>
+      <td>1005.55</td>
+      <td>1005.38</td>
+      <td>3844699</td>
+      <td>3.865374e+09</td>
+      <td>74672</td>
+      <td>2634496</td>
+      <td>68.52</td>
+      <td>08</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>56</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-08-02</td>
+      <td>1005.55</td>
+      <td>1006.00</td>
+      <td>1012.75</td>
+      <td>987.20</td>
+      <td>989.10</td>
+      <td>993.35</td>
+      <td>999.06</td>
+      <td>2128792</td>
+      <td>2.126781e+09</td>
+      <td>64338</td>
+      <td>1154252</td>
+      <td>54.22</td>
+      <td>08</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>57</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-08-03</td>
+      <td>993.35</td>
+      <td>991.00</td>
+      <td>998.75</td>
+      <td>980.25</td>
+      <td>981.80</td>
+      <td>984.00</td>
+      <td>988.23</td>
+      <td>2320174</td>
+      <td>2.292870e+09</td>
+      <td>64881</td>
+      <td>1484098</td>
+      <td>63.96</td>
+      <td>08</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>58</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-08-04</td>
+      <td>984.00</td>
+      <td>988.00</td>
+      <td>989.00</td>
+      <td>976.05</td>
+      <td>983.50</td>
+      <td>983.75</td>
+      <td>981.53</td>
+      <td>2674509</td>
+      <td>2.625109e+09</td>
+      <td>54851</td>
+      <td>1951568</td>
+      <td>72.97</td>
+      <td>08</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>59</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-08-07</td>
+      <td>983.75</td>
+      <td>983.50</td>
+      <td>983.75</td>
+      <td>965.70</td>
+      <td>966.50</td>
+      <td>968.25</td>
+      <td>972.33</td>
+      <td>3036872</td>
+      <td>2.952835e+09</td>
+      <td>75997</td>
+      <td>2439913</td>
+      <td>80.34</td>
+      <td>08</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>76</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-09-01</td>
+      <td>914.95</td>
+      <td>915.95</td>
+      <td>925.90</td>
+      <td>910.00</td>
+      <td>919.85</td>
+      <td>919.95</td>
+      <td>919.57</td>
+      <td>4216961</td>
+      <td>3.877810e+09</td>
+      <td>81607</td>
+      <td>2288888</td>
+      <td>54.28</td>
+      <td>09</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>77</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-09-04</td>
+      <td>919.95</td>
+      <td>921.00</td>
+      <td>921.10</td>
+      <td>893.50</td>
+      <td>899.95</td>
+      <td>900.20</td>
+      <td>904.13</td>
+      <td>5088554</td>
+      <td>4.600718e+09</td>
+      <td>141455</td>
+      <td>2605004</td>
+      <td>51.19</td>
+      <td>09</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>78</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-09-05</td>
+      <td>900.20</td>
+      <td>902.00</td>
+      <td>905.00</td>
+      <td>897.25</td>
+      <td>901.00</td>
+      <td>901.90</td>
+      <td>901.02</td>
+      <td>4891696</td>
+      <td>4.407506e+09</td>
+      <td>79400</td>
+      <td>3043364</td>
+      <td>62.21</td>
+      <td>09</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>79</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-09-06</td>
+      <td>901.90</td>
+      <td>900.00</td>
+      <td>900.30</td>
+      <td>890.00</td>
+      <td>896.90</td>
+      <td>895.60</td>
+      <td>894.39</td>
+      <td>3867955</td>
+      <td>3.459475e+09</td>
+      <td>126593</td>
+      <td>2169351</td>
+      <td>56.09</td>
+      <td>09</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>80</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-09-07</td>
+      <td>895.60</td>
+      <td>900.00</td>
+      <td>900.50</td>
+      <td>892.35</td>
+      <td>894.65</td>
+      <td>895.75</td>
+      <td>896.04</td>
+      <td>3120596</td>
+      <td>2.796181e+09</td>
+      <td>74906</td>
+      <td>2144854</td>
+      <td>68.73</td>
+      <td>09</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>97</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-10-03</td>
+      <td>899.90</td>
+      <td>910.10</td>
+      <td>912.00</td>
+      <td>901.60</td>
+      <td>903.05</td>
+      <td>903.55</td>
+      <td>905.66</td>
+      <td>2473761</td>
+      <td>2.240392e+09</td>
+      <td>98569</td>
+      <td>1968356</td>
+      <td>79.57</td>
+      <td>10</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>98</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-10-04</td>
+      <td>903.55</td>
+      <td>903.00</td>
+      <td>905.40</td>
+      <td>897.15</td>
+      <td>901.45</td>
+      <td>899.60</td>
+      <td>901.13</td>
+      <td>2495746</td>
+      <td>2.248997e+09</td>
+      <td>81198</td>
+      <td>1658660</td>
+      <td>66.46</td>
+      <td>10</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>99</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-10-05</td>
+      <td>899.60</td>
+      <td>900.00</td>
+      <td>904.95</td>
+      <td>899.00</td>
+      <td>903.00</td>
+      <td>903.05</td>
+      <td>902.78</td>
+      <td>4305650</td>
+      <td>3.887064e+09</td>
+      <td>46048</td>
+      <td>3573231</td>
+      <td>82.99</td>
+      <td>10</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>100</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-10-06</td>
+      <td>903.05</td>
+      <td>904.00</td>
+      <td>922.00</td>
+      <td>903.95</td>
+      <td>920.50</td>
+      <td>920.15</td>
+      <td>916.53</td>
+      <td>4287154</td>
+      <td>3.929315e+09</td>
+      <td>76214</td>
+      <td>2820790</td>
+      <td>65.80</td>
+      <td>10</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>101</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-10-09</td>
+      <td>920.15</td>
+      <td>920.00</td>
+      <td>929.00</td>
+      <td>914.00</td>
+      <td>924.25</td>
+      <td>923.90</td>
+      <td>923.72</td>
+      <td>1752416</td>
+      <td>1.618746e+09</td>
+      <td>39646</td>
+      <td>1158064</td>
+      <td>66.08</td>
+      <td>10</td>
+      <td>2017</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>385</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2018-12-03</td>
+      <td>667.45</td>
+      <td>673.15</td>
+      <td>679.00</td>
+      <td>665.95</td>
+      <td>672.45</td>
+      <td>670.35</td>
+      <td>670.58</td>
+      <td>8260890</td>
+      <td>5.539597e+09</td>
+      <td>103845</td>
+      <td>6137214</td>
+      <td>74.29</td>
+      <td>12</td>
+      <td>2018</td>
+    </tr>
+    <tr>
+      <th>386</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2018-12-04</td>
+      <td>670.35</td>
+      <td>672.55</td>
+      <td>688.25</td>
+      <td>671.30</td>
+      <td>683.00</td>
+      <td>685.25</td>
+      <td>682.83</td>
+      <td>7827923</td>
+      <td>5.345133e+09</td>
+      <td>129170</td>
+      <td>4357939</td>
+      <td>55.67</td>
+      <td>12</td>
+      <td>2018</td>
+    </tr>
+    <tr>
+      <th>387</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2018-12-05</td>
+      <td>685.25</td>
+      <td>683.00</td>
+      <td>683.65</td>
+      <td>672.50</td>
+      <td>682.05</td>
+      <td>681.40</td>
+      <td>678.97</td>
+      <td>5177288</td>
+      <td>3.515207e+09</td>
+      <td>96257</td>
+      <td>3101033</td>
+      <td>59.90</td>
+      <td>12</td>
+      <td>2018</td>
+    </tr>
+    <tr>
+      <th>388</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2018-12-06</td>
+      <td>681.40</td>
+      <td>676.10</td>
+      <td>685.45</td>
+      <td>664.55</td>
+      <td>669.70</td>
+      <td>668.50</td>
+      <td>672.12</td>
+      <td>8039771</td>
+      <td>5.403660e+09</td>
+      <td>229269</td>
+      <td>3922722</td>
+      <td>48.79</td>
+      <td>12</td>
+      <td>2018</td>
+    </tr>
+    <tr>
+      <th>389</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2018-12-07</td>
+      <td>668.50</td>
+      <td>672.00</td>
+      <td>685.75</td>
+      <td>665.60</td>
+      <td>681.00</td>
+      <td>682.80</td>
+      <td>679.07</td>
+      <td>5553948</td>
+      <td>3.771509e+09</td>
+      <td>125999</td>
+      <td>3024829</td>
+      <td>54.46</td>
+      <td>12</td>
+      <td>2018</td>
+    </tr>
+    <tr>
+      <th>405</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-01-01</td>
+      <td>658.95</td>
+      <td>660.95</td>
+      <td>666.30</td>
+      <td>654.15</td>
+      <td>665.95</td>
+      <td>665.05</td>
+      <td>660.66</td>
+      <td>2943390</td>
+      <td>1.944579e+09</td>
+      <td>45422</td>
+      <td>1282161</td>
+      <td>43.56</td>
+      <td>01</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>406</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-01-02</td>
+      <td>665.05</td>
+      <td>666.00</td>
+      <td>674.00</td>
+      <td>662.05</td>
+      <td>668.00</td>
+      <td>669.05</td>
+      <td>669.97</td>
+      <td>7416655</td>
+      <td>4.968963e+09</td>
+      <td>108094</td>
+      <td>3880800</td>
+      <td>52.33</td>
+      <td>01</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>407</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-01-03</td>
+      <td>669.05</td>
+      <td>672.00</td>
+      <td>677.00</td>
+      <td>663.10</td>
+      <td>668.00</td>
+      <td>669.15</td>
+      <td>669.66</td>
+      <td>6827249</td>
+      <td>4.571929e+09</td>
+      <td>125781</td>
+      <td>3676359</td>
+      <td>53.85</td>
+      <td>01</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>408</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-01-04</td>
+      <td>669.15</td>
+      <td>671.75</td>
+      <td>673.90</td>
+      <td>651.00</td>
+      <td>660.25</td>
+      <td>661.05</td>
+      <td>660.17</td>
+      <td>7889310</td>
+      <td>5.208305e+09</td>
+      <td>187590</td>
+      <td>3747741</td>
+      <td>47.50</td>
+      <td>01</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>409</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-01-07</td>
+      <td>661.05</td>
+      <td>665.00</td>
+      <td>673.60</td>
+      <td>661.50</td>
+      <td>671.70</td>
+      <td>671.70</td>
+      <td>667.51</td>
+      <td>8046340</td>
+      <td>5.370974e+09</td>
+      <td>132736</td>
+      <td>4711672</td>
+      <td>58.56</td>
+      <td>01</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>428</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-02-01</td>
+      <td>749.55</td>
+      <td>751.35</td>
+      <td>762.50</td>
+      <td>744.50</td>
+      <td>756.70</td>
+      <td>757.05</td>
+      <td>753.37</td>
+      <td>6276585</td>
+      <td>4.728608e+09</td>
+      <td>119145</td>
+      <td>2274954</td>
+      <td>36.25</td>
+      <td>02</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>429</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-02-04</td>
+      <td>757.05</td>
+      <td>757.00</td>
+      <td>762.50</td>
+      <td>749.20</td>
+      <td>755.90</td>
+      <td>755.90</td>
+      <td>754.39</td>
+      <td>3945391</td>
+      <td>2.976362e+09</td>
+      <td>110537</td>
+      <td>1894178</td>
+      <td>48.01</td>
+      <td>02</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>430</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-02-05</td>
+      <td>755.90</td>
+      <td>747.00</td>
+      <td>759.95</td>
+      <td>747.00</td>
+      <td>755.00</td>
+      <td>754.85</td>
+      <td>753.48</td>
+      <td>4694366</td>
+      <td>3.537095e+09</td>
+      <td>98651</td>
+      <td>2610466</td>
+      <td>55.61</td>
+      <td>02</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>431</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-02-06</td>
+      <td>754.85</td>
+      <td>755.55</td>
+      <td>766.95</td>
+      <td>754.35</td>
+      <td>763.75</td>
+      <td>763.30</td>
+      <td>762.75</td>
+      <td>5880482</td>
+      <td>4.485361e+09</td>
+      <td>150791</td>
+      <td>3188901</td>
+      <td>54.23</td>
+      <td>02</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>432</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-02-07</td>
+      <td>763.30</td>
+      <td>763.05</td>
+      <td>769.45</td>
+      <td>761.00</td>
+      <td>763.00</td>
+      <td>764.00</td>
+      <td>766.20</td>
+      <td>3961797</td>
+      <td>3.035522e+09</td>
+      <td>102039</td>
+      <td>2154773</td>
+      <td>54.39</td>
+      <td>02</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>449</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-01</td>
+      <td>734.30</td>
+      <td>735.50</td>
+      <td>743.40</td>
+      <td>735.50</td>
+      <td>741.80</td>
+      <td>741.90</td>
+      <td>740.00</td>
+      <td>3998826</td>
+      <td>2.959116e+09</td>
+      <td>86883</td>
+      <td>2141670</td>
+      <td>53.56</td>
+      <td>03</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>450</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-05</td>
+      <td>741.90</td>
+      <td>740.50</td>
+      <td>742.50</td>
+      <td>730.25</td>
+      <td>732.75</td>
+      <td>732.50</td>
+      <td>734.79</td>
+      <td>4826505</td>
+      <td>3.546464e+09</td>
+      <td>187167</td>
+      <td>2953053</td>
+      <td>61.18</td>
+      <td>03</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>451</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-06</td>
+      <td>732.50</td>
+      <td>736.10</td>
+      <td>736.10</td>
+      <td>727.00</td>
+      <td>732.25</td>
+      <td>732.50</td>
+      <td>732.02</td>
+      <td>6076668</td>
+      <td>4.448254e+09</td>
+      <td>201307</td>
+      <td>3216638</td>
+      <td>52.93</td>
+      <td>03</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>452</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-07</td>
+      <td>732.50</td>
+      <td>734.00</td>
+      <td>734.50</td>
+      <td>720.55</td>
+      <td>723.30</td>
+      <td>722.95</td>
+      <td>724.84</td>
+      <td>5951551</td>
+      <td>4.313907e+09</td>
+      <td>132988</td>
+      <td>3097595</td>
+      <td>52.05</td>
+      <td>03</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>453</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-08</td>
+      <td>722.95</td>
+      <td>722.95</td>
+      <td>722.95</td>
+      <td>710.65</td>
+      <td>713.20</td>
+      <td>712.35</td>
+      <td>714.77</td>
+      <td>7193994</td>
+      <td>5.142023e+09</td>
+      <td>154378</td>
+      <td>3414734</td>
+      <td>47.47</td>
+      <td>03</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>469</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-01</td>
+      <td>743.85</td>
+      <td>742.00</td>
+      <td>760.00</td>
+      <td>742.00</td>
+      <td>753.75</td>
+      <td>755.10</td>
+      <td>754.32</td>
+      <td>6584982</td>
+      <td>4.967200e+09</td>
+      <td>149150</td>
+      <td>3788889</td>
+      <td>57.54</td>
+      <td>04</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>470</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-02</td>
+      <td>755.10</td>
+      <td>759.00</td>
+      <td>765.80</td>
+      <td>754.60</td>
+      <td>755.00</td>
+      <td>759.40</td>
+      <td>760.56</td>
+      <td>7283600</td>
+      <td>5.539625e+09</td>
+      <td>169885</td>
+      <td>4249666</td>
+      <td>58.35</td>
+      <td>04</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>471</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-03</td>
+      <td>759.40</td>
+      <td>756.00</td>
+      <td>758.50</td>
+      <td>746.80</td>
+      <td>751.65</td>
+      <td>753.30</td>
+      <td>752.48</td>
+      <td>6897127</td>
+      <td>5.189956e+09</td>
+      <td>200625</td>
+      <td>4213270</td>
+      <td>61.09</td>
+      <td>04</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>472</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-04</td>
+      <td>753.30</td>
+      <td>751.40</td>
+      <td>753.80</td>
+      <td>745.10</td>
+      <td>748.95</td>
+      <td>747.90</td>
+      <td>748.43</td>
+      <td>7688525</td>
+      <td>5.754346e+09</td>
+      <td>178872</td>
+      <td>5138276</td>
+      <td>66.83</td>
+      <td>04</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>473</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-05</td>
+      <td>747.90</td>
+      <td>750.90</td>
+      <td>760.95</td>
+      <td>748.00</td>
+      <td>759.55</td>
+      <td>759.30</td>
+      <td>758.69</td>
+      <td>6276040</td>
+      <td>4.761576e+09</td>
+      <td>148065</td>
+      <td>3851738</td>
+      <td>61.37</td>
+      <td>04</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>488</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-02</td>
+      <td>751.35</td>
+      <td>747.00</td>
+      <td>748.40</td>
+      <td>729.50</td>
+      <td>730.80</td>
+      <td>730.80</td>
+      <td>738.19</td>
+      <td>6351352</td>
+      <td>4.688477e+09</td>
+      <td>115522</td>
+      <td>4071262</td>
+      <td>64.10</td>
+      <td>05</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>489</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-03</td>
+      <td>730.80</td>
+      <td>722.90</td>
+      <td>731.00</td>
+      <td>718.20</td>
+      <td>723.65</td>
+      <td>723.60</td>
+      <td>725.26</td>
+      <td>6348116</td>
+      <td>4.604058e+09</td>
+      <td>133663</td>
+      <td>3735602</td>
+      <td>58.85</td>
+      <td>05</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>490</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-06</td>
+      <td>723.60</td>
+      <td>715.00</td>
+      <td>721.80</td>
+      <td>710.65</td>
+      <td>717.15</td>
+      <td>718.40</td>
+      <td>718.07</td>
+      <td>8858265</td>
+      <td>6.360864e+09</td>
+      <td>148896</td>
+      <td>6519864</td>
+      <td>73.60</td>
+      <td>05</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>491</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-07</td>
+      <td>718.40</td>
+      <td>720.40</td>
+      <td>727.90</td>
+      <td>718.70</td>
+      <td>724.40</td>
+      <td>724.55</td>
+      <td>724.51</td>
+      <td>5747536</td>
+      <td>4.164127e+09</td>
+      <td>104342</td>
+      <td>3690425</td>
+      <td>64.21</td>
+      <td>05</td>
+      <td>2019</td>
+    </tr>
+    <tr>
+      <th>492</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-08</td>
+      <td>724.55</td>
+      <td>721.00</td>
+      <td>726.00</td>
+      <td>716.50</td>
+      <td>718.95</td>
+      <td>719.35</td>
+      <td>721.65</td>
+      <td>6247642</td>
+      <td>4.508603e+09</td>
+      <td>162077</td>
+      <td>3950857</td>
+      <td>63.24</td>
+      <td>05</td>
+      <td>2019</td>
+    </tr>
+  </tbody>
+</table>
+<p>125 rows × 17 columns</p>
+</div>
+
+
+
+
+```python
+df['VWAP']=np.cumsum(df['Average Price']*df['Total Traded Quantity'])/np.cumsum(df['Total Traded Quantity'])
+df.round(2)
+
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Symbol</th>
+      <th>Series</th>
+      <th>Date</th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+      <th>Month</th>
+      <th>Year</th>
+      <th>VWAP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-15</td>
+      <td>964.25</td>
+      <td>963.50</td>
+      <td>963.50</td>
+      <td>949.10</td>
+      <td>953.25</td>
+      <td>951.55</td>
+      <td>951.49</td>
+      <td>3648582</td>
+      <td>3.471580e+09</td>
+      <td>75335</td>
+      <td>3052819</td>
+      <td>83.67</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>951.49</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-16</td>
+      <td>951.55</td>
+      <td>953.10</td>
+      <td>960.15</td>
+      <td>946.95</td>
+      <td>956.00</td>
+      <td>955.00</td>
+      <td>952.92</td>
+      <td>3065084</td>
+      <td>2.920775e+09</td>
+      <td>71808</td>
+      <td>1858063</td>
+      <td>60.62</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>952.14</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-17</td>
+      <td>955.00</td>
+      <td>951.60</td>
+      <td>958.45</td>
+      <td>943.85</td>
+      <td>952.90</td>
+      <td>952.80</td>
+      <td>949.48</td>
+      <td>1457754</td>
+      <td>1.384110e+09</td>
+      <td>75429</td>
+      <td>792251</td>
+      <td>54.35</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>951.67</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-18</td>
+      <td>952.80</td>
+      <td>943.00</td>
+      <td>973.90</td>
+      <td>942.85</td>
+      <td>960.25</td>
+      <td>961.75</td>
+      <td>962.61</td>
+      <td>4028924</td>
+      <td>3.878282e+09</td>
+      <td>120990</td>
+      <td>2309450</td>
+      <td>57.32</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>955.28</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-19</td>
+      <td>961.75</td>
+      <td>961.50</td>
+      <td>962.70</td>
+      <td>947.85</td>
+      <td>957.40</td>
+      <td>957.95</td>
+      <td>954.18</td>
+      <td>2128698</td>
+      <td>2.031155e+09</td>
+      <td>88897</td>
+      <td>1457747</td>
+      <td>68.48</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>955.12</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-22</td>
+      <td>957.95</td>
+      <td>958.40</td>
+      <td>966.90</td>
+      <td>956.55</td>
+      <td>960.00</td>
+      <td>961.45</td>
+      <td>962.29</td>
+      <td>2751526</td>
+      <td>2.647755e+09</td>
+      <td>99616</td>
+      <td>2034031</td>
+      <td>73.92</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>956.27</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-23</td>
+      <td>961.45</td>
+      <td>964.65</td>
+      <td>967.00</td>
+      <td>954.10</td>
+      <td>957.50</td>
+      <td>957.30</td>
+      <td>960.16</td>
+      <td>2019991</td>
+      <td>1.939515e+09</td>
+      <td>80122</td>
+      <td>1436389</td>
+      <td>71.11</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>956.68</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-24</td>
+      <td>957.30</td>
+      <td>960.00</td>
+      <td>965.50</td>
+      <td>949.60</td>
+      <td>957.00</td>
+      <td>954.80</td>
+      <td>958.37</td>
+      <td>2818143</td>
+      <td>2.700827e+09</td>
+      <td>56898</td>
+      <td>1913750</td>
+      <td>67.91</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>956.90</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-25</td>
+      <td>954.80</td>
+      <td>961.00</td>
+      <td>986.60</td>
+      <td>961.00</td>
+      <td>981.00</td>
+      <td>983.30</td>
+      <td>978.16</td>
+      <td>5219257</td>
+      <td>5.105250e+09</td>
+      <td>76160</td>
+      <td>4108984</td>
+      <td>78.73</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>960.99</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-26</td>
+      <td>983.30</td>
+      <td>987.00</td>
+      <td>1000.00</td>
+      <td>980.60</td>
+      <td>996.05</td>
+      <td>995.70</td>
+      <td>994.06</td>
+      <td>2494002</td>
+      <td>2.479194e+09</td>
+      <td>63671</td>
+      <td>1477643</td>
+      <td>59.25</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>963.77</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-29</td>
+      <td>995.70</td>
+      <td>990.90</td>
+      <td>996.70</td>
+      <td>975.70</td>
+      <td>986.00</td>
+      <td>985.15</td>
+      <td>983.11</td>
+      <td>3154217</td>
+      <td>3.100929e+09</td>
+      <td>83084</td>
+      <td>2272869</td>
+      <td>72.06</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>965.63</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-30</td>
+      <td>985.15</td>
+      <td>982.00</td>
+      <td>1000.00</td>
+      <td>978.65</td>
+      <td>993.00</td>
+      <td>996.20</td>
+      <td>995.45</td>
+      <td>1858455</td>
+      <td>1.850004e+09</td>
+      <td>62012</td>
+      <td>1280033</td>
+      <td>68.88</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>967.23</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-31</td>
+      <td>996.20</td>
+      <td>993.55</td>
+      <td>993.55</td>
+      <td>974.85</td>
+      <td>976.05</td>
+      <td>977.05</td>
+      <td>980.19</td>
+      <td>3881950</td>
+      <td>3.805051e+09</td>
+      <td>121323</td>
+      <td>3086038</td>
+      <td>79.50</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>968.54</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-01</td>
+      <td>977.05</td>
+      <td>969.30</td>
+      <td>979.70</td>
+      <td>958.55</td>
+      <td>971.25</td>
+      <td>971.40</td>
+      <td>969.49</td>
+      <td>2754303</td>
+      <td>2.670263e+09</td>
+      <td>81421</td>
+      <td>1822506</td>
+      <td>66.17</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>968.60</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-02</td>
+      <td>971.40</td>
+      <td>973.40</td>
+      <td>975.45</td>
+      <td>964.20</td>
+      <td>966.00</td>
+      <td>969.45</td>
+      <td>968.76</td>
+      <td>1958983</td>
+      <td>1.897793e+09</td>
+      <td>48927</td>
+      <td>1396644</td>
+      <td>71.29</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>968.61</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-05</td>
+      <td>969.45</td>
+      <td>970.00</td>
+      <td>972.00</td>
+      <td>957.05</td>
+      <td>959.00</td>
+      <td>958.75</td>
+      <td>961.71</td>
+      <td>2731349</td>
+      <td>2.626761e+09</td>
+      <td>83794</td>
+      <td>1941199</td>
+      <td>71.07</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>968.20</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-06</td>
+      <td>958.75</td>
+      <td>965.00</td>
+      <td>987.50</td>
+      <td>964.40</td>
+      <td>980.00</td>
+      <td>979.35</td>
+      <td>980.08</td>
+      <td>3504343</td>
+      <td>3.434526e+09</td>
+      <td>83178</td>
+      <td>2018029</td>
+      <td>57.59</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>969.04</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-07</td>
+      <td>979.35</td>
+      <td>985.00</td>
+      <td>988.90</td>
+      <td>945.00</td>
+      <td>959.30</td>
+      <td>961.30</td>
+      <td>963.75</td>
+      <td>6227523</td>
+      <td>6.001805e+09</td>
+      <td>139990</td>
+      <td>2519343</td>
+      <td>40.45</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>968.45</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-08</td>
+      <td>961.30</td>
+      <td>962.95</td>
+      <td>962.95</td>
+      <td>948.15</td>
+      <td>956.05</td>
+      <td>956.45</td>
+      <td>952.81</td>
+      <td>3097676</td>
+      <td>2.951502e+09</td>
+      <td>88147</td>
+      <td>1778850</td>
+      <td>57.43</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>967.63</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-09</td>
+      <td>956.45</td>
+      <td>938.55</td>
+      <td>950.95</td>
+      <td>923.00</td>
+      <td>949.00</td>
+      <td>948.60</td>
+      <td>937.55</td>
+      <td>7378831</td>
+      <td>6.918028e+09</td>
+      <td>161124</td>
+      <td>3054942</td>
+      <td>41.40</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>964.27</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-12</td>
+      <td>948.60</td>
+      <td>943.35</td>
+      <td>965.20</td>
+      <td>940.10</td>
+      <td>964.40</td>
+      <td>963.85</td>
+      <td>953.95</td>
+      <td>4295838</td>
+      <td>4.097997e+09</td>
+      <td>89686</td>
+      <td>2215716</td>
+      <td>51.58</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>963.64</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-13</td>
+      <td>963.85</td>
+      <td>953.50</td>
+      <td>962.95</td>
+      <td>951.60</td>
+      <td>957.95</td>
+      <td>957.80</td>
+      <td>958.26</td>
+      <td>2468897</td>
+      <td>2.365834e+09</td>
+      <td>69355</td>
+      <td>1449584</td>
+      <td>58.71</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>963.46</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-14</td>
+      <td>957.80</td>
+      <td>960.00</td>
+      <td>961.90</td>
+      <td>951.20</td>
+      <td>958.50</td>
+      <td>958.60</td>
+      <td>957.02</td>
+      <td>3719055</td>
+      <td>3.559195e+09</td>
+      <td>90312</td>
+      <td>2710765</td>
+      <td>72.89</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>963.15</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-15</td>
+      <td>958.60</td>
+      <td>959.65</td>
+      <td>967.95</td>
+      <td>949.60</td>
+      <td>951.35</td>
+      <td>952.10</td>
+      <td>956.12</td>
+      <td>2764031</td>
+      <td>2.642753e+09</td>
+      <td>67490</td>
+      <td>1852460</td>
+      <td>67.02</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>962.90</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-16</td>
+      <td>952.10</td>
+      <td>949.10</td>
+      <td>953.85</td>
+      <td>936.00</td>
+      <td>937.00</td>
+      <td>940.25</td>
+      <td>942.47</td>
+      <td>5474225</td>
+      <td>5.159269e+09</td>
+      <td>109487</td>
+      <td>4241070</td>
+      <td>77.47</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>961.59</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-19</td>
+      <td>940.25</td>
+      <td>939.95</td>
+      <td>940.25</td>
+      <td>928.00</td>
+      <td>930.80</td>
+      <td>929.85</td>
+      <td>931.98</td>
+      <td>3427930</td>
+      <td>3.194760e+09</td>
+      <td>82075</td>
+      <td>2297829</td>
+      <td>67.03</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>960.44</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-20</td>
+      <td>929.85</td>
+      <td>935.00</td>
+      <td>946.90</td>
+      <td>934.05</td>
+      <td>944.25</td>
+      <td>943.55</td>
+      <td>943.01</td>
+      <td>2592198</td>
+      <td>2.444472e+09</td>
+      <td>105790</td>
+      <td>1509148</td>
+      <td>58.22</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>959.94</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-21</td>
+      <td>943.55</td>
+      <td>945.00</td>
+      <td>949.00</td>
+      <td>936.05</td>
+      <td>948.55</td>
+      <td>943.35</td>
+      <td>941.04</td>
+      <td>1867932</td>
+      <td>1.757792e+09</td>
+      <td>59945</td>
+      <td>1286468</td>
+      <td>68.87</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>959.56</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-22</td>
+      <td>943.35</td>
+      <td>947.70</td>
+      <td>968.70</td>
+      <td>935.10</td>
+      <td>939.00</td>
+      <td>940.15</td>
+      <td>953.78</td>
+      <td>4732621</td>
+      <td>4.513896e+09</td>
+      <td>115123</td>
+      <td>2848768</td>
+      <td>60.19</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>959.28</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-23</td>
+      <td>940.15</td>
+      <td>945.00</td>
+      <td>949.15</td>
+      <td>938.00</td>
+      <td>943.05</td>
+      <td>943.25</td>
+      <td>943.77</td>
+      <td>3201509</td>
+      <td>3.021489e+09</td>
+      <td>118944</td>
+      <td>2359021</td>
+      <td>73.68</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>958.79</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>466</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-27</td>
+      <td>727.75</td>
+      <td>730.00</td>
+      <td>732.30</td>
+      <td>727.15</td>
+      <td>728.90</td>
+      <td>729.70</td>
+      <td>730.32</td>
+      <td>7387487</td>
+      <td>5.395200e+09</td>
+      <td>122789</td>
+      <td>5505910</td>
+      <td>74.53</td>
+      <td>03</td>
+      <td>2019</td>
+      <td>918.08</td>
+    </tr>
+    <tr>
+      <th>467</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-28</td>
+      <td>729.70</td>
+      <td>730.00</td>
+      <td>745.00</td>
+      <td>730.00</td>
+      <td>739.10</td>
+      <td>737.80</td>
+      <td>739.73</td>
+      <td>9277241</td>
+      <td>6.862617e+09</td>
+      <td>187881</td>
+      <td>5521081</td>
+      <td>59.51</td>
+      <td>03</td>
+      <td>2019</td>
+      <td>917.48</td>
+    </tr>
+    <tr>
+      <th>468</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-29</td>
+      <td>737.80</td>
+      <td>743.90</td>
+      <td>747.95</td>
+      <td>740.00</td>
+      <td>742.15</td>
+      <td>743.85</td>
+      <td>743.49</td>
+      <td>6924061</td>
+      <td>5.147991e+09</td>
+      <td>155083</td>
+      <td>4592403</td>
+      <td>66.33</td>
+      <td>03</td>
+      <td>2019</td>
+      <td>917.04</td>
+    </tr>
+    <tr>
+      <th>469</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-01</td>
+      <td>743.85</td>
+      <td>742.00</td>
+      <td>760.00</td>
+      <td>742.00</td>
+      <td>753.75</td>
+      <td>755.10</td>
+      <td>754.32</td>
+      <td>6584982</td>
+      <td>4.967200e+09</td>
+      <td>149150</td>
+      <td>3788889</td>
+      <td>57.54</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>916.65</td>
+    </tr>
+    <tr>
+      <th>470</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-02</td>
+      <td>755.10</td>
+      <td>759.00</td>
+      <td>765.80</td>
+      <td>754.60</td>
+      <td>755.00</td>
+      <td>759.40</td>
+      <td>760.56</td>
+      <td>7283600</td>
+      <td>5.539625e+09</td>
+      <td>169885</td>
+      <td>4249666</td>
+      <td>58.35</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>916.24</td>
+    </tr>
+    <tr>
+      <th>471</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-03</td>
+      <td>759.40</td>
+      <td>756.00</td>
+      <td>758.50</td>
+      <td>746.80</td>
+      <td>751.65</td>
+      <td>753.30</td>
+      <td>752.48</td>
+      <td>6897127</td>
+      <td>5.189956e+09</td>
+      <td>200625</td>
+      <td>4213270</td>
+      <td>61.09</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>915.84</td>
+    </tr>
+    <tr>
+      <th>472</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-04</td>
+      <td>753.30</td>
+      <td>751.40</td>
+      <td>753.80</td>
+      <td>745.10</td>
+      <td>748.95</td>
+      <td>747.90</td>
+      <td>748.43</td>
+      <td>7688525</td>
+      <td>5.754346e+09</td>
+      <td>178872</td>
+      <td>5138276</td>
+      <td>66.83</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>915.38</td>
+    </tr>
+    <tr>
+      <th>473</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-05</td>
+      <td>747.90</td>
+      <td>750.90</td>
+      <td>760.95</td>
+      <td>748.00</td>
+      <td>759.55</td>
+      <td>759.30</td>
+      <td>758.69</td>
+      <td>6276040</td>
+      <td>4.761576e+09</td>
+      <td>148065</td>
+      <td>3851738</td>
+      <td>61.37</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>915.03</td>
+    </tr>
+    <tr>
+      <th>474</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-08</td>
+      <td>759.30</td>
+      <td>763.05</td>
+      <td>770.00</td>
+      <td>755.40</td>
+      <td>769.15</td>
+      <td>767.25</td>
+      <td>762.80</td>
+      <td>4919911</td>
+      <td>3.752910e+09</td>
+      <td>143815</td>
+      <td>2380635</td>
+      <td>48.39</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>914.76</td>
+    </tr>
+    <tr>
+      <th>475</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-09</td>
+      <td>767.25</td>
+      <td>770.00</td>
+      <td>773.00</td>
+      <td>758.20</td>
+      <td>760.80</td>
+      <td>760.60</td>
+      <td>765.16</td>
+      <td>6730692</td>
+      <td>5.150088e+09</td>
+      <td>146107</td>
+      <td>3353329</td>
+      <td>49.82</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>914.40</td>
+    </tr>
+    <tr>
+      <th>476</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-10</td>
+      <td>760.60</td>
+      <td>764.00</td>
+      <td>766.70</td>
+      <td>751.30</td>
+      <td>752.85</td>
+      <td>752.70</td>
+      <td>759.53</td>
+      <td>7031088</td>
+      <td>5.340337e+09</td>
+      <td>134089</td>
+      <td>4201714</td>
+      <td>59.76</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>914.01</td>
+    </tr>
+    <tr>
+      <th>477</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-11</td>
+      <td>752.70</td>
+      <td>751.75</td>
+      <td>751.75</td>
+      <td>740.05</td>
+      <td>743.40</td>
+      <td>742.70</td>
+      <td>744.27</td>
+      <td>8200995</td>
+      <td>6.103734e+09</td>
+      <td>158348</td>
+      <td>5047043</td>
+      <td>61.54</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>913.52</td>
+    </tr>
+    <tr>
+      <th>478</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-12</td>
+      <td>742.70</td>
+      <td>743.10</td>
+      <td>751.55</td>
+      <td>740.60</td>
+      <td>748.00</td>
+      <td>747.75</td>
+      <td>746.82</td>
+      <td>7043212</td>
+      <td>5.260021e+09</td>
+      <td>165165</td>
+      <td>2587611</td>
+      <td>36.74</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>913.11</td>
+    </tr>
+    <tr>
+      <th>479</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-15</td>
+      <td>747.75</td>
+      <td>724.70</td>
+      <td>731.35</td>
+      <td>712.60</td>
+      <td>728.20</td>
+      <td>727.50</td>
+      <td>724.58</td>
+      <td>31574803</td>
+      <td>2.287863e+10</td>
+      <td>566543</td>
+      <td>16753549</td>
+      <td>53.06</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>911.03</td>
+    </tr>
+    <tr>
+      <th>480</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-16</td>
+      <td>727.50</td>
+      <td>727.90</td>
+      <td>727.90</td>
+      <td>714.10</td>
+      <td>724.00</td>
+      <td>724.10</td>
+      <td>722.40</td>
+      <td>12524411</td>
+      <td>9.047647e+09</td>
+      <td>343101</td>
+      <td>7260034</td>
+      <td>57.97</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>910.21</td>
+    </tr>
+    <tr>
+      <th>481</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-18</td>
+      <td>724.10</td>
+      <td>722.50</td>
+      <td>722.50</td>
+      <td>712.75</td>
+      <td>715.70</td>
+      <td>717.05</td>
+      <td>716.80</td>
+      <td>13801105</td>
+      <td>9.892654e+09</td>
+      <td>302789</td>
+      <td>8498108</td>
+      <td>61.58</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>909.28</td>
+    </tr>
+    <tr>
+      <th>482</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-22</td>
+      <td>717.05</td>
+      <td>717.05</td>
+      <td>725.75</td>
+      <td>715.00</td>
+      <td>721.30</td>
+      <td>721.05</td>
+      <td>721.04</td>
+      <td>6455426</td>
+      <td>4.654647e+09</td>
+      <td>115955</td>
+      <td>3535056</td>
+      <td>54.76</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>908.86</td>
+    </tr>
+    <tr>
+      <th>483</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-23</td>
+      <td>721.05</td>
+      <td>723.90</td>
+      <td>730.00</td>
+      <td>718.40</td>
+      <td>725.80</td>
+      <td>728.20</td>
+      <td>726.32</td>
+      <td>5516668</td>
+      <td>4.006855e+09</td>
+      <td>130836</td>
+      <td>2893716</td>
+      <td>52.45</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>908.52</td>
+    </tr>
+    <tr>
+      <th>484</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-24</td>
+      <td>728.20</td>
+      <td>728.20</td>
+      <td>737.90</td>
+      <td>724.00</td>
+      <td>735.00</td>
+      <td>736.45</td>
+      <td>733.43</td>
+      <td>8285120</td>
+      <td>6.076540e+09</td>
+      <td>174385</td>
+      <td>4993503</td>
+      <td>60.27</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>908.02</td>
+    </tr>
+    <tr>
+      <th>485</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-25</td>
+      <td>736.45</td>
+      <td>736.45</td>
+      <td>737.65</td>
+      <td>727.05</td>
+      <td>730.05</td>
+      <td>728.55</td>
+      <td>730.72</td>
+      <td>8005235</td>
+      <td>5.849612e+09</td>
+      <td>174336</td>
+      <td>5361863</td>
+      <td>66.98</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>907.53</td>
+    </tr>
+    <tr>
+      <th>486</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-26</td>
+      <td>728.55</td>
+      <td>731.00</td>
+      <td>739.80</td>
+      <td>729.00</td>
+      <td>738.60</td>
+      <td>738.00</td>
+      <td>736.11</td>
+      <td>6895168</td>
+      <td>5.075637e+09</td>
+      <td>151426</td>
+      <td>4168443</td>
+      <td>60.45</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>907.13</td>
+    </tr>
+    <tr>
+      <th>487</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-30</td>
+      <td>738.00</td>
+      <td>738.00</td>
+      <td>753.80</td>
+      <td>738.00</td>
+      <td>748.85</td>
+      <td>751.35</td>
+      <td>748.61</td>
+      <td>9920046</td>
+      <td>7.426242e+09</td>
+      <td>165676</td>
+      <td>6888736</td>
+      <td>69.44</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>906.59</td>
+    </tr>
+    <tr>
+      <th>488</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-02</td>
+      <td>751.35</td>
+      <td>747.00</td>
+      <td>748.40</td>
+      <td>729.50</td>
+      <td>730.80</td>
+      <td>730.80</td>
+      <td>738.19</td>
+      <td>6351352</td>
+      <td>4.688477e+09</td>
+      <td>115522</td>
+      <td>4071262</td>
+      <td>64.10</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>906.23</td>
+    </tr>
+    <tr>
+      <th>489</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-03</td>
+      <td>730.80</td>
+      <td>722.90</td>
+      <td>731.00</td>
+      <td>718.20</td>
+      <td>723.65</td>
+      <td>723.60</td>
+      <td>725.26</td>
+      <td>6348116</td>
+      <td>4.604058e+09</td>
+      <td>133663</td>
+      <td>3735602</td>
+      <td>58.85</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>905.84</td>
+    </tr>
+    <tr>
+      <th>490</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-06</td>
+      <td>723.60</td>
+      <td>715.00</td>
+      <td>721.80</td>
+      <td>710.65</td>
+      <td>717.15</td>
+      <td>718.40</td>
+      <td>718.07</td>
+      <td>8858265</td>
+      <td>6.360864e+09</td>
+      <td>148896</td>
+      <td>6519864</td>
+      <td>73.60</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>905.28</td>
+    </tr>
+    <tr>
+      <th>491</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-07</td>
+      <td>718.40</td>
+      <td>720.40</td>
+      <td>727.90</td>
+      <td>718.70</td>
+      <td>724.40</td>
+      <td>724.55</td>
+      <td>724.51</td>
+      <td>5747536</td>
+      <td>4.164127e+09</td>
+      <td>104342</td>
+      <td>3690425</td>
+      <td>64.21</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>904.93</td>
+    </tr>
+    <tr>
+      <th>492</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-08</td>
+      <td>724.55</td>
+      <td>721.00</td>
+      <td>726.00</td>
+      <td>716.50</td>
+      <td>718.95</td>
+      <td>719.35</td>
+      <td>721.65</td>
+      <td>6247642</td>
+      <td>4.508603e+09</td>
+      <td>162077</td>
+      <td>3950857</td>
+      <td>63.24</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>904.54</td>
+    </tr>
+    <tr>
+      <th>493</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-09</td>
+      <td>719.35</td>
+      <td>719.15</td>
+      <td>730.30</td>
+      <td>715.80</td>
+      <td>722.00</td>
+      <td>721.05</td>
+      <td>724.48</td>
+      <td>7396525</td>
+      <td>5.358635e+09</td>
+      <td>242225</td>
+      <td>4808832</td>
+      <td>65.01</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>904.09</td>
+    </tr>
+    <tr>
+      <th>494</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-10</td>
+      <td>721.05</td>
+      <td>720.80</td>
+      <td>726.00</td>
+      <td>715.00</td>
+      <td>716.50</td>
+      <td>716.85</td>
+      <td>717.88</td>
+      <td>8352335</td>
+      <td>5.995942e+09</td>
+      <td>181229</td>
+      <td>5545377</td>
+      <td>66.39</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>903.57</td>
+    </tr>
+    <tr>
+      <th>495</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-13</td>
+      <td>716.85</td>
+      <td>716.55</td>
+      <td>726.45</td>
+      <td>712.10</td>
+      <td>718.00</td>
+      <td>719.70</td>
+      <td>720.09</td>
+      <td>6808993</td>
+      <td>4.903098e+09</td>
+      <td>201194</td>
+      <td>4745909</td>
+      <td>69.70</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>903.16</td>
+    </tr>
+  </tbody>
+</table>
+<p>494 rows × 18 columns</p>
+</div>
+
+
+
+
+```python
+df.describe()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+      <th>VWAP</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>count</th>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+      <td>4.940000e+02</td>
+      <td>4.940000e+02</td>
+      <td>4.940000e+02</td>
+      <td>4.940000e+02</td>
+      <td>494.000000</td>
+      <td>494.000000</td>
+    </tr>
+    <tr>
+      <th>mean</th>
+      <td>961.440789</td>
+      <td>961.070040</td>
+      <td>971.092713</td>
+      <td>951.052733</td>
+      <td>960.845648</td>
+      <td>960.945749</td>
+      <td>961.166498</td>
+      <td>6.056365e+06</td>
+      <td>5.469840e+09</td>
+      <td>1.361482e+05</td>
+      <td>3.605878e+06</td>
+      <td>61.759008</td>
+      <td>974.503770</td>
+    </tr>
+    <tr>
+      <th>std</th>
+      <td>220.761549</td>
+      <td>220.091227</td>
+      <td>222.968974</td>
+      <td>218.714372</td>
+      <td>220.968590</td>
+      <td>221.029267</td>
+      <td>221.102384</td>
+      <td>5.451445e+06</td>
+      <td>4.770342e+09</td>
+      <td>8.557589e+04</td>
+      <td>2.840733e+06</td>
+      <td>9.924135</td>
+      <td>43.481977</td>
+    </tr>
+    <tr>
+      <th>min</th>
+      <td>619.100000</td>
+      <td>621.000000</td>
+      <td>628.000000</td>
+      <td>599.850000</td>
+      <td>619.500000</td>
+      <td>619.100000</td>
+      <td>613.780000</td>
+      <td>5.457170e+05</td>
+      <td>5.060941e+08</td>
+      <td>1.388600e+04</td>
+      <td>3.077410e+05</td>
+      <td>26.380000</td>
+      <td>903.155533</td>
+    </tr>
+    <tr>
+      <th>25%</th>
+      <td>735.025000</td>
+      <td>736.187500</td>
+      <td>742.700000</td>
+      <td>729.012500</td>
+      <td>734.125000</td>
+      <td>734.462500</td>
+      <td>735.720000</td>
+      <td>3.148044e+06</td>
+      <td>3.350973e+09</td>
+      <td>9.246300e+04</td>
+      <td>2.064895e+06</td>
+      <td>55.142500</td>
+      <td>937.858802</td>
+    </tr>
+    <tr>
+      <th>50%</th>
+      <td>956.750000</td>
+      <td>957.525000</td>
+      <td>964.775000</td>
+      <td>948.000000</td>
+      <td>956.025000</td>
+      <td>955.975000</td>
+      <td>955.060000</td>
+      <td>4.905804e+06</td>
+      <td>4.601808e+09</td>
+      <td>1.197605e+05</td>
+      <td>3.053880e+06</td>
+      <td>62.270000</td>
+      <td>963.812326</td>
+    </tr>
+    <tr>
+      <th>75%</th>
+      <td>1150.150000</td>
+      <td>1145.412500</td>
+      <td>1161.675000</td>
+      <td>1135.962500</td>
+      <td>1147.950000</td>
+      <td>1150.150000</td>
+      <td>1148.280000</td>
+      <td>7.303918e+06</td>
+      <td>6.042062e+09</td>
+      <td>1.551745e+05</td>
+      <td>4.332777e+06</td>
+      <td>68.767500</td>
+      <td>1009.103008</td>
+    </tr>
+    <tr>
+      <th>max</th>
+      <td>1441.100000</td>
+      <td>1449.000000</td>
+      <td>1467.900000</td>
+      <td>1430.000000</td>
+      <td>1440.000000</td>
+      <td>1441.100000</td>
+      <td>1451.300000</td>
+      <td>8.220248e+07</td>
+      <td>7.662502e+10</td>
+      <td>1.192900e+06</td>
+      <td>4.202849e+07</td>
+      <td>88.700000</td>
+      <td>1070.852784</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+df.info()
+```
+
+    <class 'pandas.core.frame.DataFrame'>
+    Int64Index: 494 entries, 0 to 495
+    Data columns (total 18 columns):
+    Symbol                    494 non-null object
+    Series                    494 non-null object
+    Date                      494 non-null datetime64[ns]
+    Prev Close                494 non-null float64
+    Open Price                494 non-null float64
+    High Price                494 non-null float64
+    Low Price                 494 non-null float64
+    Last Price                494 non-null float64
+    Close Price               494 non-null float64
+    Average Price             494 non-null float64
+    Total Traded Quantity     494 non-null int64
+    Turnover                  494 non-null float64
+    No. of Trades             494 non-null int64
+    Deliverable Qty           494 non-null int64
+    % Dly Qt to Traded Qty    494 non-null float64
+    Month                     494 non-null object
+    Year                      494 non-null object
+    VWAP                      494 non-null float64
+    dtypes: datetime64[ns](1), float64(10), int64(3), object(4)
+    memory usage: 73.3+ KB
+
+
+
+# Query 1.5
+
+Write a function to calculate the average price over the last N days of the stock price data where price data where N is a user defined parameter.
+Write a second function to calculate the profit/loss percentage over the last N days.
+Calculate the average prince AND the profit/loss percentage over the coure of last-
+1 Week , 2 Weeks , 1 Month , 3 Month , 6 Month and 1 Year.
+{Note: Profit/loss percentage between N days is the percentage change between the closing prices of the 2 days}.
+
+
+```python
+#x=int(input("Enter number of days : "))
+def average_price(x):
+    list1=list(df['Average Price'].tail(x))
+    result=0
+    for i in range(x):
+        result=result+list1[i]
+    return result/x
+
+def Profit_loss_percentage (x):
+    list1=list(df['Close Price'].tail(x))
+    result=0
+    for i in range(x-1):
+        result=result+(list1[i+1]-list1[i])/list1[i]
+    return result*100
+```
+
+
+      File "<ipython-input-69-44319c425224>", line 9
+        def Profit/loss_percentage (x):
+                  ^
+    SyntaxError: invalid syntax
+
+
+
+
+```python
+#for last 1 week average price
+print("last 1 week average price:","% 0.2f"%average_price(7))
+
+#for last 2 week average price
+print("last 2 week average price:","% 0.2f"%average_price(14))
+
+#for last 1 month average price
+print("last 1 month average price:","% 0.2f"%average_price(30))
+
+
+#for last 6 month average price
+print("last 6 month average price:","% 0.2f"%average_price(180))
+
+#for last 1 year average price
+print("last 1 year average price:","% 0.2f"%average_price(365))
+```
+
+    last 1 week average price:  721.71
+    last 2 week average price:  727.60
+    last 1 month average price:  737.22
+    last 6 month average price:  758.82
+    last 1 year average price:  967.04
+
+
+
+```python
+#last 1 week profit/loss percentage
+print("last 1 week profit/loss percentage","% 0.2f"%Profit_loss_percentage(7))
+#last 2 week profit/loss percentage
+print("last 2 week profit/loss percentage","% 0.2f"%Profit_loss_percentage(14))
+#last 1 month profit/loss percentage
+print("last 1 month profit/loss percentage","% 0.2f"%Profit_loss_percentage(30))
+#last 6 month profit/loss percentage
+print("last 6 month profit/loss percentage","% 0.2f"%Profit_loss_percentage(180))
+#last 1 year profit/loss percentage
+print("last 1 year profit/loss percentage","% 0.2f"%Profit_loss_percentage(365))
+```
+
+    last 1 week profit/loss percentage -0.53
+    last 2 week profit/loss percentage -0.09
+    last 1 month profit/loss percentage -1.17
+    last 6 month profit/loss percentage -47.08
+    last 1 year profit/loss percentage -8.25
+
+
+# Query 1.6
+
+Add a column'Day_perc_change' Where the values are the daily change in percentages i.e. the percentage change between 2 consecutive days closing prices. Instead of using the basic mathematical formula for computing the same , use'pct_change()'function provied by pandas for dataframes. you will note that the first entey of the column will have a 'nan' value. why does this happen? either romove the first row or set the entry to 0 before proceeding.
+
+
+```python
+df3=df['Close Price']
+df['Day_Pct_Change']=df3.pct_change()*100
+df=df.fillna(0)
+df.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Symbol</th>
+      <th>Series</th>
+      <th>Date</th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+      <th>Month</th>
+      <th>Year</th>
+      <th>VWAP</th>
+      <th>Day_Pct_Change</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-15</td>
+      <td>964.25</td>
+      <td>963.5</td>
+      <td>963.50</td>
+      <td>949.10</td>
+      <td>953.25</td>
+      <td>951.55</td>
+      <td>951.49</td>
+      <td>3648582</td>
+      <td>3.471580e+09</td>
+      <td>75335</td>
+      <td>3052819</td>
+      <td>83.67</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>951.490000</td>
+      <td>0.000000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-16</td>
+      <td>951.55</td>
+      <td>953.1</td>
+      <td>960.15</td>
+      <td>946.95</td>
+      <td>956.00</td>
+      <td>955.00</td>
+      <td>952.92</td>
+      <td>3065084</td>
+      <td>2.920775e+09</td>
+      <td>71808</td>
+      <td>1858063</td>
+      <td>60.62</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>952.142858</td>
+      <td>0.362566</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-17</td>
+      <td>955.00</td>
+      <td>951.6</td>
+      <td>958.45</td>
+      <td>943.85</td>
+      <td>952.90</td>
+      <td>952.80</td>
+      <td>949.48</td>
+      <td>1457754</td>
+      <td>1.384110e+09</td>
+      <td>75429</td>
+      <td>792251</td>
+      <td>54.35</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>951.667813</td>
+      <td>-0.230366</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-18</td>
+      <td>952.80</td>
+      <td>943.0</td>
+      <td>973.90</td>
+      <td>942.85</td>
+      <td>960.25</td>
+      <td>961.75</td>
+      <td>962.61</td>
+      <td>4028924</td>
+      <td>3.878282e+09</td>
+      <td>120990</td>
+      <td>2309450</td>
+      <td>57.32</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>955.281255</td>
+      <td>0.939337</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-19</td>
+      <td>961.75</td>
+      <td>961.5</td>
+      <td>962.70</td>
+      <td>947.85</td>
+      <td>957.40</td>
+      <td>957.95</td>
+      <td>954.18</td>
+      <td>2128698</td>
+      <td>2.031155e+09</td>
+      <td>88897</td>
+      <td>1457747</td>
+      <td>68.48</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>955.117655</td>
+      <td>-0.395113</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+# Query 1.7
+### Query 1.7 Add another column'Trend' whose values are:
+##### (1)'Slight or No change' for 'Day_Perc_Change'in between -0.5 and 0.5.
+##### (2)'Slight positive' for 'Day_Perc_Change'in between 0.5 and 1.
+##### (3)'Slight negative' for 'Day_Perc_Change'in between -0.5 and -1.
+##### (4)'Positive' for 'Day_Perc_Change'in between 1 and 3.
+##### (5)'Negative' for 'Day_Perc_Change'in between -1 and -3.
+##### (6)'Among top gainer' for 'Day_Perc_Change'in between 3 and 7.
+##### (7)'Among top loser' for 'Day_Perc_Change'in between -3 and -7.
+##### (8)'Bull run' for 'Day_Perc_Change'>7.
+##### (9)'Bear drop' for 'Day_Perc_Change'<-7.
+
+
+```python
+df['Day_Pct_Change']=round(df['Day_Pct_Change'],1)
+df['Trend']=np.zeros(df['Day_Pct_Change'].count())
+```
+
+
+```python
+def trend(x):
+  if x > -0.5 and x <= 0.5:
+    return 'Slight or No change'
+  elif x > 0.5 and x <= 1:
+    return 'Slight Positive'
+  elif x > -1 and x <= -0.5:
+    return 'Slight Negative'
+  elif x > 1 and x <= 3:
+    return 'Positive'
+  elif x > -3 and x <= -1:
+    return 'Negative'
+  elif x > 3 and x <= 7:
+    return 'Among top gainers'
+  elif x > -7 and x <= -3:
+    return 'Among top losers'
+  elif x > 7:
+    return 'Bull run'
+  elif x <= -7:
+    return 'Bear drop'
+df['Trend']=df['Day_Pct_Change'].apply(lambda x:trend(x))
+df
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Symbol</th>
+      <th>Series</th>
+      <th>Date</th>
+      <th>Prev Close</th>
+      <th>Open Price</th>
+      <th>High Price</th>
+      <th>Low Price</th>
+      <th>Last Price</th>
+      <th>Close Price</th>
+      <th>Average Price</th>
+      <th>Total Traded Quantity</th>
+      <th>Turnover</th>
+      <th>No. of Trades</th>
+      <th>Deliverable Qty</th>
+      <th>% Dly Qt to Traded Qty</th>
+      <th>Month</th>
+      <th>Year</th>
+      <th>VWAP</th>
+      <th>Day_Pct_Change</th>
+      <th>Trend</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-15</td>
+      <td>964.25</td>
+      <td>963.50</td>
+      <td>963.50</td>
+      <td>949.10</td>
+      <td>953.25</td>
+      <td>951.55</td>
+      <td>951.49</td>
+      <td>3648582</td>
+      <td>3.471580e+09</td>
+      <td>75335</td>
+      <td>3052819</td>
+      <td>83.67</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>951.490000</td>
+      <td>0.0</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-16</td>
+      <td>951.55</td>
+      <td>953.10</td>
+      <td>960.15</td>
+      <td>946.95</td>
+      <td>956.00</td>
+      <td>955.00</td>
+      <td>952.92</td>
+      <td>3065084</td>
+      <td>2.920775e+09</td>
+      <td>71808</td>
+      <td>1858063</td>
+      <td>60.62</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>952.142858</td>
+      <td>0.4</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-17</td>
+      <td>955.00</td>
+      <td>951.60</td>
+      <td>958.45</td>
+      <td>943.85</td>
+      <td>952.90</td>
+      <td>952.80</td>
+      <td>949.48</td>
+      <td>1457754</td>
+      <td>1.384110e+09</td>
+      <td>75429</td>
+      <td>792251</td>
+      <td>54.35</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>951.667813</td>
+      <td>-0.2</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-18</td>
+      <td>952.80</td>
+      <td>943.00</td>
+      <td>973.90</td>
+      <td>942.85</td>
+      <td>960.25</td>
+      <td>961.75</td>
+      <td>962.61</td>
+      <td>4028924</td>
+      <td>3.878282e+09</td>
+      <td>120990</td>
+      <td>2309450</td>
+      <td>57.32</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>955.281255</td>
+      <td>0.9</td>
+      <td>Slight Positive</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-19</td>
+      <td>961.75</td>
+      <td>961.50</td>
+      <td>962.70</td>
+      <td>947.85</td>
+      <td>957.40</td>
+      <td>957.95</td>
+      <td>954.18</td>
+      <td>2128698</td>
+      <td>2.031155e+09</td>
+      <td>88897</td>
+      <td>1457747</td>
+      <td>68.48</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>955.117655</td>
+      <td>-0.4</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-22</td>
+      <td>957.95</td>
+      <td>958.40</td>
+      <td>966.90</td>
+      <td>956.55</td>
+      <td>960.00</td>
+      <td>961.45</td>
+      <td>962.29</td>
+      <td>2751526</td>
+      <td>2.647755e+09</td>
+      <td>99616</td>
+      <td>2034031</td>
+      <td>73.92</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>956.273055</td>
+      <td>0.4</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-23</td>
+      <td>961.45</td>
+      <td>964.65</td>
+      <td>967.00</td>
+      <td>954.10</td>
+      <td>957.50</td>
+      <td>957.30</td>
+      <td>960.16</td>
+      <td>2019991</td>
+      <td>1.939515e+09</td>
+      <td>80122</td>
+      <td>1436389</td>
+      <td>71.11</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>956.684121</td>
+      <td>-0.4</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-24</td>
+      <td>957.30</td>
+      <td>960.00</td>
+      <td>965.50</td>
+      <td>949.60</td>
+      <td>957.00</td>
+      <td>954.80</td>
+      <td>958.37</td>
+      <td>2818143</td>
+      <td>2.700827e+09</td>
+      <td>56898</td>
+      <td>1913750</td>
+      <td>67.91</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>956.900879</td>
+      <td>-0.3</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-25</td>
+      <td>954.80</td>
+      <td>961.00</td>
+      <td>986.60</td>
+      <td>961.00</td>
+      <td>981.00</td>
+      <td>983.30</td>
+      <td>978.16</td>
+      <td>5219257</td>
+      <td>5.105250e+09</td>
+      <td>76160</td>
+      <td>4108984</td>
+      <td>78.73</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>960.989499</td>
+      <td>3.0</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-26</td>
+      <td>983.30</td>
+      <td>987.00</td>
+      <td>1000.00</td>
+      <td>980.60</td>
+      <td>996.05</td>
+      <td>995.70</td>
+      <td>994.06</td>
+      <td>2494002</td>
+      <td>2.479194e+09</td>
+      <td>63671</td>
+      <td>1477643</td>
+      <td>59.25</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>963.772909</td>
+      <td>1.3</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-29</td>
+      <td>995.70</td>
+      <td>990.90</td>
+      <td>996.70</td>
+      <td>975.70</td>
+      <td>986.00</td>
+      <td>985.15</td>
+      <td>983.11</td>
+      <td>3154217</td>
+      <td>3.100929e+09</td>
+      <td>83084</td>
+      <td>2272869</td>
+      <td>72.06</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>965.633248</td>
+      <td>-1.1</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-30</td>
+      <td>985.15</td>
+      <td>982.00</td>
+      <td>1000.00</td>
+      <td>978.65</td>
+      <td>993.00</td>
+      <td>996.20</td>
+      <td>995.45</td>
+      <td>1858455</td>
+      <td>1.850004e+09</td>
+      <td>62012</td>
+      <td>1280033</td>
+      <td>68.88</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>967.232719</td>
+      <td>1.1</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-05-31</td>
+      <td>996.20</td>
+      <td>993.55</td>
+      <td>993.55</td>
+      <td>974.85</td>
+      <td>976.05</td>
+      <td>977.05</td>
+      <td>980.19</td>
+      <td>3881950</td>
+      <td>3.805051e+09</td>
+      <td>121323</td>
+      <td>3086038</td>
+      <td>79.50</td>
+      <td>05</td>
+      <td>2017</td>
+      <td>968.538298</td>
+      <td>-1.9</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-01</td>
+      <td>977.05</td>
+      <td>969.30</td>
+      <td>979.70</td>
+      <td>958.55</td>
+      <td>971.25</td>
+      <td>971.40</td>
+      <td>969.49</td>
+      <td>2754303</td>
+      <td>2.670263e+09</td>
+      <td>81421</td>
+      <td>1822506</td>
+      <td>66.17</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>968.601797</td>
+      <td>-0.6</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-02</td>
+      <td>971.40</td>
+      <td>973.40</td>
+      <td>975.45</td>
+      <td>964.20</td>
+      <td>966.00</td>
+      <td>969.45</td>
+      <td>968.76</td>
+      <td>1958983</td>
+      <td>1.897793e+09</td>
+      <td>48927</td>
+      <td>1396644</td>
+      <td>71.29</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>968.608964</td>
+      <td>-0.2</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-05</td>
+      <td>969.45</td>
+      <td>970.00</td>
+      <td>972.00</td>
+      <td>957.05</td>
+      <td>959.00</td>
+      <td>958.75</td>
+      <td>961.71</td>
+      <td>2731349</td>
+      <td>2.626761e+09</td>
+      <td>83794</td>
+      <td>1941199</td>
+      <td>71.07</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>968.199067</td>
+      <td>-1.1</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-06</td>
+      <td>958.75</td>
+      <td>965.00</td>
+      <td>987.50</td>
+      <td>964.40</td>
+      <td>980.00</td>
+      <td>979.35</td>
+      <td>980.08</td>
+      <td>3504343</td>
+      <td>3.434526e+09</td>
+      <td>83178</td>
+      <td>2018029</td>
+      <td>57.59</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>969.040591</td>
+      <td>2.1</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-07</td>
+      <td>979.35</td>
+      <td>985.00</td>
+      <td>988.90</td>
+      <td>945.00</td>
+      <td>959.30</td>
+      <td>961.30</td>
+      <td>963.75</td>
+      <td>6227523</td>
+      <td>6.001805e+09</td>
+      <td>139990</td>
+      <td>2519343</td>
+      <td>40.45</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>968.449111</td>
+      <td>-1.8</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-08</td>
+      <td>961.30</td>
+      <td>962.95</td>
+      <td>962.95</td>
+      <td>948.15</td>
+      <td>956.05</td>
+      <td>956.45</td>
+      <td>952.81</td>
+      <td>3097676</td>
+      <td>2.951502e+09</td>
+      <td>88147</td>
+      <td>1778850</td>
+      <td>57.43</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>967.625228</td>
+      <td>-0.5</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-09</td>
+      <td>956.45</td>
+      <td>938.55</td>
+      <td>950.95</td>
+      <td>923.00</td>
+      <td>949.00</td>
+      <td>948.60</td>
+      <td>937.55</td>
+      <td>7378831</td>
+      <td>6.918028e+09</td>
+      <td>161124</td>
+      <td>3054942</td>
+      <td>41.40</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>964.271928</td>
+      <td>-0.8</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-12</td>
+      <td>948.60</td>
+      <td>943.35</td>
+      <td>965.20</td>
+      <td>940.10</td>
+      <td>964.40</td>
+      <td>963.85</td>
+      <td>953.95</td>
+      <td>4295838</td>
+      <td>4.097997e+09</td>
+      <td>89686</td>
+      <td>2215716</td>
+      <td>51.58</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>963.642754</td>
+      <td>1.6</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-13</td>
+      <td>963.85</td>
+      <td>953.50</td>
+      <td>962.95</td>
+      <td>951.60</td>
+      <td>957.95</td>
+      <td>957.80</td>
+      <td>958.26</td>
+      <td>2468897</td>
+      <td>2.365834e+09</td>
+      <td>69355</td>
+      <td>1449584</td>
+      <td>58.71</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>963.460568</td>
+      <td>-0.6</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-14</td>
+      <td>957.80</td>
+      <td>960.00</td>
+      <td>961.90</td>
+      <td>951.20</td>
+      <td>958.50</td>
+      <td>958.60</td>
+      <td>957.02</td>
+      <td>3719055</td>
+      <td>3.559195e+09</td>
+      <td>90312</td>
+      <td>2710765</td>
+      <td>72.89</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>963.148126</td>
+      <td>0.1</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-15</td>
+      <td>958.60</td>
+      <td>959.65</td>
+      <td>967.95</td>
+      <td>949.60</td>
+      <td>951.35</td>
+      <td>952.10</td>
+      <td>956.12</td>
+      <td>2764031</td>
+      <td>2.642753e+09</td>
+      <td>67490</td>
+      <td>1852460</td>
+      <td>67.02</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>962.903551</td>
+      <td>-0.7</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-16</td>
+      <td>952.10</td>
+      <td>949.10</td>
+      <td>953.85</td>
+      <td>936.00</td>
+      <td>937.00</td>
+      <td>940.25</td>
+      <td>942.47</td>
+      <td>5474225</td>
+      <td>5.159269e+09</td>
+      <td>109487</td>
+      <td>4241070</td>
+      <td>77.47</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>961.586052</td>
+      <td>-1.2</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>25</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-19</td>
+      <td>940.25</td>
+      <td>939.95</td>
+      <td>940.25</td>
+      <td>928.00</td>
+      <td>930.80</td>
+      <td>929.85</td>
+      <td>931.98</td>
+      <td>3427930</td>
+      <td>3.194760e+09</td>
+      <td>82075</td>
+      <td>2297829</td>
+      <td>67.03</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>960.437088</td>
+      <td>-1.1</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>26</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-20</td>
+      <td>929.85</td>
+      <td>935.00</td>
+      <td>946.90</td>
+      <td>934.05</td>
+      <td>944.25</td>
+      <td>943.55</td>
+      <td>943.01</td>
+      <td>2592198</td>
+      <td>2.444472e+09</td>
+      <td>105790</td>
+      <td>1509148</td>
+      <td>58.22</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>959.940238</td>
+      <td>1.5</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>27</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-21</td>
+      <td>943.55</td>
+      <td>945.00</td>
+      <td>949.00</td>
+      <td>936.05</td>
+      <td>948.55</td>
+      <td>943.35</td>
+      <td>941.04</td>
+      <td>1867932</td>
+      <td>1.757792e+09</td>
+      <td>59945</td>
+      <td>1286468</td>
+      <td>68.87</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>959.559761</td>
+      <td>-0.0</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-22</td>
+      <td>943.35</td>
+      <td>947.70</td>
+      <td>968.70</td>
+      <td>935.10</td>
+      <td>939.00</td>
+      <td>940.15</td>
+      <td>953.78</td>
+      <td>4732621</td>
+      <td>4.513896e+09</td>
+      <td>115123</td>
+      <td>2848768</td>
+      <td>60.19</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>959.279277</td>
+      <td>-0.3</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2017-06-23</td>
+      <td>940.15</td>
+      <td>945.00</td>
+      <td>949.15</td>
+      <td>938.00</td>
+      <td>943.05</td>
+      <td>943.25</td>
+      <td>943.77</td>
+      <td>3201509</td>
+      <td>3.021489e+09</td>
+      <td>118944</td>
+      <td>2359021</td>
+      <td>73.68</td>
+      <td>06</td>
+      <td>2017</td>
+      <td>958.786314</td>
+      <td>0.3</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>466</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-27</td>
+      <td>727.75</td>
+      <td>730.00</td>
+      <td>732.30</td>
+      <td>727.15</td>
+      <td>728.90</td>
+      <td>729.70</td>
+      <td>730.32</td>
+      <td>7387487</td>
+      <td>5.395200e+09</td>
+      <td>122789</td>
+      <td>5505910</td>
+      <td>74.53</td>
+      <td>03</td>
+      <td>2019</td>
+      <td>918.075664</td>
+      <td>0.3</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>467</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-28</td>
+      <td>729.70</td>
+      <td>730.00</td>
+      <td>745.00</td>
+      <td>730.00</td>
+      <td>739.10</td>
+      <td>737.80</td>
+      <td>739.73</td>
+      <td>9277241</td>
+      <td>6.862617e+09</td>
+      <td>187881</td>
+      <td>5521081</td>
+      <td>59.51</td>
+      <td>03</td>
+      <td>2019</td>
+      <td>917.475573</td>
+      <td>1.1</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>468</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-03-29</td>
+      <td>737.80</td>
+      <td>743.90</td>
+      <td>747.95</td>
+      <td>740.00</td>
+      <td>742.15</td>
+      <td>743.85</td>
+      <td>743.49</td>
+      <td>6924061</td>
+      <td>5.147991e+09</td>
+      <td>155083</td>
+      <td>4592403</td>
+      <td>66.33</td>
+      <td>03</td>
+      <td>2019</td>
+      <td>917.039740</td>
+      <td>0.8</td>
+      <td>Slight Positive</td>
+    </tr>
+    <tr>
+      <th>469</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-01</td>
+      <td>743.85</td>
+      <td>742.00</td>
+      <td>760.00</td>
+      <td>742.00</td>
+      <td>753.75</td>
+      <td>755.10</td>
+      <td>754.32</td>
+      <td>6584982</td>
+      <td>4.967200e+09</td>
+      <td>149150</td>
+      <td>3788889</td>
+      <td>57.54</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>916.653010</td>
+      <td>1.5</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>470</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-02</td>
+      <td>755.10</td>
+      <td>759.00</td>
+      <td>765.80</td>
+      <td>754.60</td>
+      <td>755.00</td>
+      <td>759.40</td>
+      <td>760.56</td>
+      <td>7283600</td>
+      <td>5.539625e+09</td>
+      <td>169885</td>
+      <td>4249666</td>
+      <td>58.35</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>916.243747</td>
+      <td>0.6</td>
+      <td>Slight Positive</td>
+    </tr>
+    <tr>
+      <th>471</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-03</td>
+      <td>759.40</td>
+      <td>756.00</td>
+      <td>758.50</td>
+      <td>746.80</td>
+      <td>751.65</td>
+      <td>753.30</td>
+      <td>752.48</td>
+      <td>6897127</td>
+      <td>5.189956e+09</td>
+      <td>200625</td>
+      <td>4213270</td>
+      <td>61.09</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>915.838162</td>
+      <td>-0.8</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>472</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-04</td>
+      <td>753.30</td>
+      <td>751.40</td>
+      <td>753.80</td>
+      <td>745.10</td>
+      <td>748.95</td>
+      <td>747.90</td>
+      <td>748.43</td>
+      <td>7688525</td>
+      <td>5.754346e+09</td>
+      <td>178872</td>
+      <td>5138276</td>
+      <td>66.83</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>915.377250</td>
+      <td>-0.7</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>473</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-05</td>
+      <td>747.90</td>
+      <td>750.90</td>
+      <td>760.95</td>
+      <td>748.00</td>
+      <td>759.55</td>
+      <td>759.30</td>
+      <td>758.69</td>
+      <td>6276040</td>
+      <td>4.761576e+09</td>
+      <td>148065</td>
+      <td>3851738</td>
+      <td>61.37</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>915.025898</td>
+      <td>1.5</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>474</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-08</td>
+      <td>759.30</td>
+      <td>763.05</td>
+      <td>770.00</td>
+      <td>755.40</td>
+      <td>769.15</td>
+      <td>767.25</td>
+      <td>762.80</td>
+      <td>4919911</td>
+      <td>3.752910e+09</td>
+      <td>143815</td>
+      <td>2380635</td>
+      <td>48.39</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>914.758778</td>
+      <td>1.0</td>
+      <td>Slight Positive</td>
+    </tr>
+    <tr>
+      <th>475</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-09</td>
+      <td>767.25</td>
+      <td>770.00</td>
+      <td>773.00</td>
+      <td>758.20</td>
+      <td>760.80</td>
+      <td>760.60</td>
+      <td>765.16</td>
+      <td>6730692</td>
+      <td>5.150088e+09</td>
+      <td>146107</td>
+      <td>3353329</td>
+      <td>49.82</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>914.400510</td>
+      <td>-0.9</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>476</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-10</td>
+      <td>760.60</td>
+      <td>764.00</td>
+      <td>766.70</td>
+      <td>751.30</td>
+      <td>752.85</td>
+      <td>752.70</td>
+      <td>759.53</td>
+      <td>7031088</td>
+      <td>5.340337e+09</td>
+      <td>134089</td>
+      <td>4201714</td>
+      <td>59.76</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>914.014032</td>
+      <td>-1.0</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>477</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-11</td>
+      <td>752.70</td>
+      <td>751.75</td>
+      <td>751.75</td>
+      <td>740.05</td>
+      <td>743.40</td>
+      <td>742.70</td>
+      <td>744.27</td>
+      <td>8200995</td>
+      <td>6.103734e+09</td>
+      <td>158348</td>
+      <td>5047043</td>
+      <td>61.54</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>913.521388</td>
+      <td>-1.3</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>478</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-12</td>
+      <td>742.70</td>
+      <td>743.10</td>
+      <td>751.55</td>
+      <td>740.60</td>
+      <td>748.00</td>
+      <td>747.75</td>
+      <td>746.82</td>
+      <td>7043212</td>
+      <td>5.260021e+09</td>
+      <td>165165</td>
+      <td>2587611</td>
+      <td>36.74</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>913.106910</td>
+      <td>0.7</td>
+      <td>Slight Positive</td>
+    </tr>
+    <tr>
+      <th>479</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-15</td>
+      <td>747.75</td>
+      <td>724.70</td>
+      <td>731.35</td>
+      <td>712.60</td>
+      <td>728.20</td>
+      <td>727.50</td>
+      <td>724.58</td>
+      <td>31574803</td>
+      <td>2.287863e+10</td>
+      <td>566543</td>
+      <td>16753549</td>
+      <td>53.06</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>911.028693</td>
+      <td>-2.7</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>480</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-16</td>
+      <td>727.50</td>
+      <td>727.90</td>
+      <td>727.90</td>
+      <td>714.10</td>
+      <td>724.00</td>
+      <td>724.10</td>
+      <td>722.40</td>
+      <td>12524411</td>
+      <td>9.047647e+09</td>
+      <td>343101</td>
+      <td>7260034</td>
+      <td>57.97</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>910.207497</td>
+      <td>-0.5</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>481</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-18</td>
+      <td>724.10</td>
+      <td>722.50</td>
+      <td>722.50</td>
+      <td>712.75</td>
+      <td>715.70</td>
+      <td>717.05</td>
+      <td>716.80</td>
+      <td>13801105</td>
+      <td>9.892654e+09</td>
+      <td>302789</td>
+      <td>8498108</td>
+      <td>61.58</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>909.284095</td>
+      <td>-1.0</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>482</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-22</td>
+      <td>717.05</td>
+      <td>717.05</td>
+      <td>725.75</td>
+      <td>715.00</td>
+      <td>721.30</td>
+      <td>721.05</td>
+      <td>721.04</td>
+      <td>6455426</td>
+      <td>4.654647e+09</td>
+      <td>115955</td>
+      <td>3535056</td>
+      <td>54.76</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>908.864644</td>
+      <td>0.6</td>
+      <td>Slight Positive</td>
+    </tr>
+    <tr>
+      <th>483</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-23</td>
+      <td>721.05</td>
+      <td>723.90</td>
+      <td>730.00</td>
+      <td>718.40</td>
+      <td>725.80</td>
+      <td>728.20</td>
+      <td>726.32</td>
+      <td>5516668</td>
+      <td>4.006855e+09</td>
+      <td>130836</td>
+      <td>2893716</td>
+      <td>52.45</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>908.517704</td>
+      <td>1.0</td>
+      <td>Slight Positive</td>
+    </tr>
+    <tr>
+      <th>484</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-24</td>
+      <td>728.20</td>
+      <td>728.20</td>
+      <td>737.90</td>
+      <td>724.00</td>
+      <td>735.00</td>
+      <td>736.45</td>
+      <td>733.43</td>
+      <td>8285120</td>
+      <td>6.076540e+09</td>
+      <td>174385</td>
+      <td>4993503</td>
+      <td>60.27</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>908.019365</td>
+      <td>1.1</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>485</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-25</td>
+      <td>736.45</td>
+      <td>736.45</td>
+      <td>737.65</td>
+      <td>727.05</td>
+      <td>730.05</td>
+      <td>728.55</td>
+      <td>730.72</td>
+      <td>8005235</td>
+      <td>5.849612e+09</td>
+      <td>174336</td>
+      <td>5361863</td>
+      <td>66.98</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>907.533115</td>
+      <td>-1.1</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>486</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-26</td>
+      <td>728.55</td>
+      <td>731.00</td>
+      <td>739.80</td>
+      <td>729.00</td>
+      <td>738.60</td>
+      <td>738.00</td>
+      <td>736.11</td>
+      <td>6895168</td>
+      <td>5.075637e+09</td>
+      <td>151426</td>
+      <td>4168443</td>
+      <td>60.45</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>907.129128</td>
+      <td>1.3</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>487</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-04-30</td>
+      <td>738.00</td>
+      <td>738.00</td>
+      <td>753.80</td>
+      <td>738.00</td>
+      <td>748.85</td>
+      <td>751.35</td>
+      <td>748.61</td>
+      <td>9920046</td>
+      <td>7.426242e+09</td>
+      <td>165676</td>
+      <td>6888736</td>
+      <td>69.44</td>
+      <td>04</td>
+      <td>2019</td>
+      <td>906.593481</td>
+      <td>1.8</td>
+      <td>Positive</td>
+    </tr>
+    <tr>
+      <th>488</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-02</td>
+      <td>751.35</td>
+      <td>747.00</td>
+      <td>748.40</td>
+      <td>729.50</td>
+      <td>730.80</td>
+      <td>730.80</td>
+      <td>738.19</td>
+      <td>6351352</td>
+      <td>4.688477e+09</td>
+      <td>115522</td>
+      <td>4071262</td>
+      <td>64.10</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>906.229933</td>
+      <td>-2.7</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>489</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-03</td>
+      <td>730.80</td>
+      <td>722.90</td>
+      <td>731.00</td>
+      <td>718.20</td>
+      <td>723.65</td>
+      <td>723.60</td>
+      <td>725.26</td>
+      <td>6348116</td>
+      <td>4.604058e+09</td>
+      <td>133663</td>
+      <td>3735602</td>
+      <td>58.85</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>905.840296</td>
+      <td>-1.0</td>
+      <td>Negative</td>
+    </tr>
+    <tr>
+      <th>490</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-06</td>
+      <td>723.60</td>
+      <td>715.00</td>
+      <td>721.80</td>
+      <td>710.65</td>
+      <td>717.15</td>
+      <td>718.40</td>
+      <td>718.07</td>
+      <td>8858265</td>
+      <td>6.360864e+09</td>
+      <td>148896</td>
+      <td>6519864</td>
+      <td>73.60</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>905.277849</td>
+      <td>-0.7</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>491</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-07</td>
+      <td>718.40</td>
+      <td>720.40</td>
+      <td>727.90</td>
+      <td>718.70</td>
+      <td>724.40</td>
+      <td>724.55</td>
+      <td>724.51</td>
+      <td>5747536</td>
+      <td>4.164127e+09</td>
+      <td>104342</td>
+      <td>3690425</td>
+      <td>64.21</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>904.927206</td>
+      <td>0.9</td>
+      <td>Slight Positive</td>
+    </tr>
+    <tr>
+      <th>492</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-08</td>
+      <td>724.55</td>
+      <td>721.00</td>
+      <td>726.00</td>
+      <td>716.50</td>
+      <td>718.95</td>
+      <td>719.35</td>
+      <td>721.65</td>
+      <td>6247642</td>
+      <td>4.508603e+09</td>
+      <td>162077</td>
+      <td>3950857</td>
+      <td>63.24</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>904.541574</td>
+      <td>-0.7</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>493</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-09</td>
+      <td>719.35</td>
+      <td>719.15</td>
+      <td>730.30</td>
+      <td>715.80</td>
+      <td>722.00</td>
+      <td>721.05</td>
+      <td>724.48</td>
+      <td>7396525</td>
+      <td>5.358635e+09</td>
+      <td>242225</td>
+      <td>4808832</td>
+      <td>65.01</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>904.094153</td>
+      <td>0.2</td>
+      <td>Slight or No change</td>
+    </tr>
+    <tr>
+      <th>494</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-10</td>
+      <td>721.05</td>
+      <td>720.80</td>
+      <td>726.00</td>
+      <td>715.00</td>
+      <td>716.50</td>
+      <td>716.85</td>
+      <td>717.88</td>
+      <td>8352335</td>
+      <td>5.995942e+09</td>
+      <td>181229</td>
+      <td>5545377</td>
+      <td>66.39</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>903.573113</td>
+      <td>-0.6</td>
+      <td>Slight Negative</td>
+    </tr>
+    <tr>
+      <th>495</th>
+      <td>INFY</td>
+      <td>EQ</td>
+      <td>2019-05-13</td>
+      <td>716.85</td>
+      <td>716.55</td>
+      <td>726.45</td>
+      <td>712.10</td>
+      <td>718.00</td>
+      <td>719.70</td>
+      <td>720.09</td>
+      <td>6808993</td>
+      <td>4.903098e+09</td>
+      <td>201194</td>
+      <td>4745909</td>
+      <td>69.70</td>
+      <td>05</td>
+      <td>2019</td>
+      <td>903.155533</td>
+      <td>0.4</td>
+      <td>Slight or No change</td>
+    </tr>
+  </tbody>
+</table>
+<p>494 rows × 20 columns</p>
+</div>
+
+
+
+# Query 1.8
+
+Find the average and median values of the column 'Total Traded Quantity' for each of the types of Trend.
+{Hint:Use The 'groupy()' on the 'Trend' column and then calculate the average and median values of the column. 
+
+
+
+```python
+df_trend_average=df.groupby(df['Trend']).mean()['Total Traded Quantity']
+df_trend_average
+```
+
+
+
+
+    Trend
+    Among top gainers      1.329248e+07
+    Among top losers       1.463854e+07
+    Bear drop              4.878630e+07
+    Negative               5.783897e+06
+    Positive               6.763830e+06
+    Slight Negative        5.305388e+06
+    Slight Positive        5.756073e+06
+    Slight or No change    4.620330e+06
+    Name: Total Traded Quantity, dtype: float64
+
+
+
+
+```python
+df_trend_median=df.groupby(df['Trend']).median()['Total Traded Quantity']
+df_trend_median
+```
+
+
+
+
+    Trend
+    Among top gainers      12136346.0
+    Among top losers       10985897.0
+    Bear drop              48786302.0
+    Negative                5330434.5
+    Positive                5553948.0
+    Slight Negative         4172856.0
+    Slight Positive         5050182.0
+    Slight or No change     4050728.0
+    Name: Total Traded Quantity, dtype: float64
+
+
+
+# Query 1.9
+Save the dataframe with additional columns computed as a csv file week2.csv. In Module 2 you are going to get familiar with matplotlib, the python module which is used to visualize data.
+
+
+```python
+df["new_column"] = ""
+df.to_csv("week2.csv",index=False)
+```
